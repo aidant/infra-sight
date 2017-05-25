@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "gulp serve",
+    "build": "gulp"
+  },
   "dependencies": {
     "body-parser": "^1.17.1",
     "cheerio": "^0.22.0",
@@ -7,6 +11,37 @@
     "request-promise": "^4.2.0"
   },
   "devDependencies": {
-    "gulp-babel": "^6.1.2"
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-regenerator": "^6.16.1",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-camo": "0.0.1",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "del": "^2.2.2",
+    "eslint": "^3.10.2",
+    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-watch": "^2.1.14",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-newer": "^1.3.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-util": "^3.0.7",
+    "run-sequence": "^1.2.2"
+  },
+  "babel": {
+    "presets": [
+      "camo"
+    ],
+    "plugins": [
+      "add-module-exports",
+      "transform-async-to-generator",
+      "transform-regenerator"
+    ]
   }
 }
