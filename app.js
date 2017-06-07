@@ -7,7 +7,7 @@ import parseProfile from './src/parseProfile'
 const app = express();
 let port = 3000;
 
-app.get('/api/v1/:name', function (req, res) {
+app.get('/api/profile/:name', function (req, res) {
 
   rp({uri: `https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`, json: true})
       .then(function (htmlString) {

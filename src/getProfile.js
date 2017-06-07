@@ -1,9 +1,8 @@
 export default function (accountInfo, name, region) {
 
-  let account = {error: true};
-  let err = {error: 'no account found'};
+  console.log(accountInfo)
 
-  if(accountInfo === '') {return err}
+  let account = {error: true};
 
   if(region && /^(us|eu|kr|xbl|psn)$/.test(region)){
 
