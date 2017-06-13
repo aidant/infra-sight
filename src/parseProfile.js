@@ -6,6 +6,7 @@ import heroImages from './HeroImages';
 import toName from './utils/ToName';
 import toNumber from './utils/ToNumber';
 import toSeconds from './utils/ToSeconds';
+import parseNumber from './utils/ParseNumber';
 
 export default function (body, profileInfo) {
 
@@ -25,28 +26,54 @@ export default function (body, profileInfo) {
   images.level_border = $('.player-level').attr('style');
   images.level_star = $('.player-rank').attr('style');
 
-
-  rank = parseFloat(rank);
-  comp.games_lost = comp.games_played - comp.games_won;
-  comp.games_won = parseFloat(comp.games_won.replace(/,/g, ''));
-  qp.games_won = parseFloat(qp.games_won.replace(/,/g, ''));
-  comp.games_played = parseFloat(comp.games_played.replace(/,/g, ''));
-  comp.time_played_seconds = toSeconds(comp.time_played);
-  qp.time_played_seconds = toSeconds(qp.time_played);
-  images.level_border = images.level_border.slice(21, 109);
-  if (images.level_star) { images.level_star = images.level_star.slice(21, 107) }; 
-
   qp.heroes = topHeroes('quickplay', $)
   comp.heroes = topHeroes('competitive', $)
   images.heroes = heroImages('quickplay', $)
+  qp.career_stats = careerStats('quickplay', $)
+  comp.career_stats = careerStats('competitive', $)
+  let career_stats = qp.career_stats.concat(comp.career_stats)
 
-  let career_stats = careerStats('quickplay', $).concat(careerStats('competitive', $))
+  comp.games_lost = null
+  for (var i = 0; i < comp.career_stats.length; i++) {
+    if (comp.career_stats[i].hero === 'all' && comp.career_stats[i].stat === 'games_lost') {
+      comp.games_lost = comp.career_stats[i].value
+    }
+  }
+
+  rank = parseNumber(rank);
+  comp.games_won = parseNumber(comp.games_won);
+  qp.games_won = parseNumber(qp.games_won);
+  comp.games_played = parseNumber(comp.games_played);
+  comp.time_played_seconds = toSeconds(comp.time_played);
+  qp.time_played_seconds = toSeconds(qp.time_played);
+  images.level_border = images.level_border.slice(21, 109);
+
+  if (images.level_star) {
+    images.level_star = images.level_star.slice(21, 107)
+  } else {
+    images.level_star = null
+  }
+
+  if (comp.games_played === null) {
+    comp.games_tied = null
+  } else {
+    comp.games_tied = comp.games_played - (comp.games_won + comp.games_lost)
+  }
+
+  if (comp.time_played_seconds === undefined) {
+    comp.time_played_seconds = 0
+  }
+
+  if (profileInfo.level < 101 || (profileInfo.level > 600 && profileInfo.level < 701) || (profileInfo.level > 1200 && profileInfo.level < 1301)) {
+    images.level_star = null
+  }
 
   const Profile = {
                     career_stats,
-                    competitive: { //missing games_tied
+                    competitive: {
                       games_lost: comp.games_lost,
                       games_played: comp.games_played,
+                      games_tied: comp.games_tied,
                       games_won: comp.games_won,
                       heroes: comp.heroes,
                       time_played_seconds: comp.time_played_seconds,
@@ -62,7 +89,7 @@ export default function (body, profileInfo) {
                       rank: images.rank
                     },
                     profile:{
-                      display_name: profileInfo.platformDisplayName,
+                      platform_username: profileInfo.platformDisplayName,
                       level: profileInfo.level,
                       url: `https://playoverwatch.com/en-us${profileInfo.careerLink}`,
                       username

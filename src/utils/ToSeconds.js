@@ -1,5 +1,7 @@
 export default function (TimePlayed) {
 
+  if(!TimePlayed) return 0
+
   TimePlayed = TimePlayed.split(' ');
 
   let TimePlayedSeconds
