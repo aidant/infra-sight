@@ -2,7 +2,6 @@ import express from 'express'
 import rp from 'request-promise'
 import Bluebird from 'bluebird';
 
-import getProfile from './src/getProfile'
 import parseProfile from './src/parseProfile'
 
 const app = express();
