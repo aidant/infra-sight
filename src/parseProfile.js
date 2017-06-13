@@ -100,5 +100,6 @@ export default function (body, profileInfo) {
                       time_played_seconds: qp.time_played_seconds
                     }
                   };
+
   return Profile;
 }

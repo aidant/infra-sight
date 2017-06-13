@@ -4,6 +4,7 @@
     "build": "gulp"
   },
   "dependencies": {
+    "apicache": "^0.8.6",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "cheerio": "^0.22.0",

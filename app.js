@@ -1,13 +1,15 @@
 import express from 'express'
 import rp from 'request-promise'
 import Bluebird from 'bluebird';
+import apicache from 'apicache';
 
 import parseProfile from './src/parseProfile'
 
 const app = express();
 let port = 3000;
+let cache = apicache.middleware
 
-app.get(['/api/profile/:name', '/api/profile/:name/:region'], function(req, res) {
+app.get(['/api/profile/:name', '/api/profile/:name/:region'], cache('10 minutes'), function(req, res) {
 
     if(req.params.region && /^(us|eu|kr|xbl|psn)$/.test(req.params.region)){
 
@@ -35,6 +37,7 @@ app.get(['/api/profile/:name', '/api/profile/:name/:region'], function(req, res)
           res.status(404).json({});
           return;
         }
+        console.log(info);
         res.json(profile);
 
       })
@@ -70,6 +73,7 @@ app.get(['/api/profile/:name', '/api/profile/:name/:region'], function(req, res)
                 res.status(404).json({});
                 return;
               }
+              console.log(info)
               res.json(profile);
 
             })
