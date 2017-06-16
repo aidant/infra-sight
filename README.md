@@ -45,6 +45,7 @@ docker run -p 3000:3000 infra-sight
 
 #### Example;
 > /api/v1/profile/LazyGamer-11985/us
+
 > /api/v1/profile/LazyGamer-11985
 
 ## Bugs
