@@ -9,7 +9,7 @@ const app = express();
 let port = 3000;
 let cache = apicache.middleware
 
-app.get(['/api/profile/:name', '/api/profile/:name/:region'], cache('10 minutes'), function(req, res) {
+app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 minutes'), function(req, res) {
 
     if(req.params.region && /^(us|eu|kr|xbl|psn)$/.test(req.params.region)){
 
