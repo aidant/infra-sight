@@ -13,8 +13,8 @@ app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 mi
 
     if(req.params.region && /^(us|eu|kr|xbl|psn)$/.test(req.params.region)){
 
-      const request1 = rp({uri: `https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`, json: true});
-      const request2 = rp(`https://playoverwatch.com/en-us/career/${req.params.region.replace('us','pc/us').replace('eu','pc/eu').replace('kr','pc/kr')}/${req.params.name}`);
+      const request1 = rp({uri: encodeURI(`https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`), json: true});
+      const request2 = rp(encodeURI(`https://playoverwatch.com/en-us/career/${req.params.region.replace('us','pc/us').replace('eu','pc/eu').replace('kr','pc/kr')}/${req.params.name}`));
 
       Bluebird.all([request1, request2])
       .spread(function(info, account) {
@@ -47,7 +47,7 @@ app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 mi
       });
     } else {
 
-      rp({uri: `https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`, json: true})
+      rp({uri: encodeURI(`https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`), json: true})
         .then(function(info) {
 
           let level = 0;
@@ -65,7 +65,7 @@ app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 mi
             }
           }
 
-          rp(`https://playoverwatch.com/en-us${accountInfo.careerLink}`)
+          rp(encodeURI(`https://playoverwatch.com/en-us${accountInfo.careerLink}`))
             .then(function(account) {
 
               let profile = parseProfile(account, accountInfo)

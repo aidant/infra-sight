@@ -47,6 +47,3 @@ docker run -p 3000:3000 infra-sight
 > /api/v1/profile/LazyGamer-11985/us
 
 > /api/v1/profile/LazyGamer-11985
-
-## Bugs
-BattleTags that contain special characters currently don’t work.
