@@ -11,6 +11,8 @@ let cache = apicache.middleware
 
 app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 minutes'), function(req, res) {
 
+  console.log(`Account: ${req.params.name} Region: ${req.params.region}`)
+
     if(req.params.region && /^(us|eu|kr|xbl|psn)$/.test(req.params.region)){
 
       const request1 = rp({uri: encodeURI(`https://playoverwatch.com/en-us/search/account-by-name/${req.params.name}`), json: true});
@@ -37,7 +39,7 @@ app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 mi
           res.status(404).json({});
           return;
         }
-        console.log(info);
+
         res.json(profile);
 
       })
@@ -73,7 +75,7 @@ app.get(['/api/v1/profile/:name', '/api/v1/profile/:name/:region'], cache('10 mi
                 res.status(404).json({});
                 return;
               }
-              console.log(info)
+
               res.json(profile);
 
             })
