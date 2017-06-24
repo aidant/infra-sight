@@ -5,6 +5,7 @@ An unofficial RESTful JSON API for Overwatch.
 Infra-Sight is built in [Node.Js](https://nodejs.org/) with [express](https://github.com/expressjs/express), [Request-Promise](https://github.com/request/request-promise) and [cheerio](https://github.com/cheeriojs/cheerio).
 
 ### Installing
+
 #### Windows/OSX/Linux
 ##### Prerequisites
 You will need [Node.Js](https://nodejs.org/en/download/) and [Git](https://git-scm.com/download) installed.

@@ -23,9 +23,6 @@ export default function (mode, $) {
       }
 
     })
-
-    //console.log(`\nname:\n${$(elem).children('td').html()} \nvalue:\n${$(elem).children('td').next().html()}`)
-    //console.log(`number: ${i}`)
   })
   return result;
 }

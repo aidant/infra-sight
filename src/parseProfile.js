@@ -33,7 +33,7 @@ export default function (body, profileInfo) {
   comp.career_stats = careerStats('competitive', $)
   let career_stats = qp.career_stats.concat(comp.career_stats)
 
-  comp.games_lost = null
+  comp.games_lost = 0
   for (var i = 0; i < comp.career_stats.length; i++) {
     if (comp.career_stats[i].hero === 'all' && comp.career_stats[i].stat === 'games_lost') {
       comp.games_lost = comp.career_stats[i].value
@@ -41,27 +41,18 @@ export default function (body, profileInfo) {
   }
 
   rank = parseNumber(rank);
-  comp.games_won = parseNumber(comp.games_won);
-  qp.games_won = parseNumber(qp.games_won);
-  comp.games_played = parseNumber(comp.games_played);
-  comp.time_played_seconds = toSeconds(comp.time_played);
-  qp.time_played_seconds = toSeconds(qp.time_played);
+  comp.games_won = parseNumber(comp.games_won) || 0;
+  qp.games_won = parseNumber(qp.games_won) || 0;
+  comp.games_played = parseNumber(comp.games_played) || 0;
+  comp.games_tied = comp.games_played - (comp.games_won + comp.games_lost);
+  comp.time_played_seconds = toSeconds(comp.time_played) || 0;
+  qp.time_played_seconds = toSeconds(qp.time_played) || 0;
   images.level_border = images.level_border.slice(21, 109);
 
   if (images.level_star) {
     images.level_star = images.level_star.slice(21, 107)
   } else {
     images.level_star = null
-  }
-
-  if (comp.games_played === null) {
-    comp.games_tied = null
-  } else {
-    comp.games_tied = comp.games_played - (comp.games_won + comp.games_lost)
-  }
-
-  if (comp.time_played_seconds === undefined) {
-    comp.time_played_seconds = 0
   }
 
   if (profileInfo.level < 101 || (profileInfo.level > 600 && profileInfo.level < 701) || (profileInfo.level > 1200 && profileInfo.level < 1301)) {
