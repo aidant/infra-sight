@@ -1,29 +1,29 @@
-export default function (TimePlayed) {
+export default function (timePlayed) {
 
-  if(!TimePlayed) return 0
+  if(!timePlayed) return 0
 
-  TimePlayed = TimePlayed.split(' ');
+  timePlayed = timePlayed.split(' ');
 
-  let TimePlayedSeconds
+  let timePlayedSeconds
 
-  if (TimePlayed == '--') {
-    TimePlayedSeconds = 0
-    return TimePlayedSeconds
+  if (timePlayed == '--') {
+    timePlayedSeconds = 0
+    return timePlayedSeconds
   }
 
-  if (TimePlayed[1].toLowerCase() == 'hours' || TimePlayed[1].toLowerCase() == 'hour') {
-    TimePlayedSeconds = parseInt(TimePlayed) * 3600
-    return TimePlayedSeconds
+  if (timePlayed[1].toLowerCase() == 'hours' || timePlayed[1].toLowerCase() == 'hour') {
+    timePlayedSeconds = parseInt(timePlayed) * 3600
+    return timePlayedSeconds
   }
 
-  if (TimePlayed[1].toLowerCase() == 'minutes' || TimePlayed[1].toLowerCase() == 'minute') {
-    TimePlayedSeconds = parseInt(TimePlayed) * 60
-    return TimePlayedSeconds
+  if (timePlayed[1].toLowerCase() == 'minutes' || timePlayed[1].toLowerCase() == 'minute') {
+    timePlayedSeconds = parseInt(timePlayed) * 60
+    return timePlayedSeconds
   }
 
-  if (TimePlayed[1].toLowerCase() == 'seconds' || TimePlayed[1].toLowerCase() == 'second') {
-    TimePlayedSeconds = parseInt(TimePlayed)
-    return TimePlayedSeconds
+  if (timePlayed[1].toLowerCase() == 'seconds' || timePlayed[1].toLowerCase() == 'second') {
+    timePlayedSeconds = parseInt(timePlayed)
+    return timePlayedSeconds
   }
 
 }

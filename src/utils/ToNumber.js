@@ -1,18 +1,18 @@
 import moment from 'moment';
 
-export default function (inp, name) {
+export default function (inp, stat) {
 
   let id = '';
   let result = {};
 
-  name = name
+  stat = stat
   .split('_')
 
-  for (var i = 0; i < name.length; i++) {
-    if (name[i] === 'time') {
+  for (var i = 0; i < stat.length; i++) {
+    if (stat[i] === 'time') {
       id = 'time'
     }
-    if (name[i] === 'accuracy') {
+    if (stat[i] === 'accuracy') {
       id = 'accuracy'
     }
   }
@@ -26,12 +26,12 @@ export default function (inp, name) {
 
       inp[0] = parseFloat(inp[0])
       result.value = moment.duration(inp[0], inp[1]).as('seconds')
-      name.push('seconds')
-      result.name = name.join('_')
+      stat.push('seconds')
+      result.stat = stat.join('_')
 
     } else {
 
-      let time = inp[0].split(':').reverse()  
+      let time = inp[0].split(':').reverse()
       let timeCorrected = []
 
       timeCorrected[0] = time[2] || '00'
@@ -40,8 +40,8 @@ export default function (inp, name) {
       timeCorrected = timeCorrected.join(':')
 
       result.value = moment.duration(timeCorrected).as('seconds')
-      name.push('seconds')
-      result.name = name.join('_')
+      stat.push('seconds')
+      result.stat = stat.join('_')
 
     }
 
@@ -52,7 +52,7 @@ export default function (inp, name) {
     inp = inp
     .replace('%', '')
     result.value = parseFloat(inp) / 100
-    result.name = name.join('_')
+    result.stat = stat.join('_')
 
   }
 
@@ -61,7 +61,7 @@ export default function (inp, name) {
     inp = inp
     .replace(/,/g, '')
     result.value = parseFloat(inp)
-    result.name = name.join('_')
+    result.stat = stat.join('_')
 
   }
   return result
