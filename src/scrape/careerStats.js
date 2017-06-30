@@ -8,7 +8,7 @@ export default function(mode, $) {
   $(`#${mode} .career-stats-section div .toggle-display`).children().children().children().children('tbody').children()
   .each((i, el) => {
     let tmp = toNumber($(el).children().next().html(), parseStatName($(el).children().html()))
-    result.push({ mode, hero: toName($(el).parent().parent().parent().parent().parent().attr('data-category-id')), stat: tmp.stat, value: tmp.value})
+    result.push({ gamemode, hero: toName($(el).parent().parent().parent().parent().parent().attr('data-category-id')), stat: tmp.stat, value: tmp.value})
   })
   return result;
 }
