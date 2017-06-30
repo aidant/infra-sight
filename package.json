@@ -1,8 +1,21 @@
 {
+  "name": "infra-sight",
+  "version": "1.0.0",
+  "description": "An unofficial API for Overwatch.",
+  "main": "app.js",
   "scripts": {
     "start": "gulp serve",
     "build": "gulp"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AidanT/Infra-Sight.git"
+  },
+  "author": "LazyGamer",
+  "bugs": {
+    "url": "https://github.com/AidanT/Infra-Sight/issues"
+  },
+  "homepage": "https://github.com/AidanT/Infra-Sight#readme",
   "dependencies": {
     "bluebird": "^3.5.0",
     "camo": "^0.12.3",
