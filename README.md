@@ -2,10 +2,15 @@
 [![GitHub](https://img.shields.io/github/issues/AidanT/Infra-Sight.svg)](https://github.com/AidanT/Infra-Sight/issues)
 
 An unofficial RESTful JSON API for Overwatch; Designed for applications like [Valkyrie](https://github.com/AidanT/Valkyrie).
+
 Infra-Sight is built in [Node.js](https://nodejs.org/) with [cheerio](https://github.com/cheeriojs/cheerio), [express](https://github.com/expressjs/express), [MongoDB](https://docs.mongodb.com/manual/administration/install-community/) and [Request-Promise](https://github.com/request/request-promise).
 
-#### Note
-After the [Horizon Lunar Colony update](https://playoverwatch.com/en-us/game/patch-notes/pc/#patch-37456) the [playoverwatch](https://playoverwatch.com/en-us/) site incorrectly displays some new stats as `OVERWATCH.GUID.0X08600000000004BA` or `OF MATCH ON FIRE`.
+### URL
+
+Coming soon™
+
+### Note
+After the [Horizon Lunar Colony update](https://playoverwatch.com/en-us/game/patch-notes/pc/#patch-37456) the [playoverwatch](https://playoverwatch.com/en-us/) site incorrectly displays some new stats as `OVERWATCH.GUID.0X08600000000004BA`, `OF MATCH ON FIRE` and more.
 
 ## Routes
 When using a BattleTag replace `#` with `~`.
