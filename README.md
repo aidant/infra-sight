@@ -31,7 +31,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
       "stat": "melee_final_blows",
       "value": 323
     },
-    {...}
+    {"..."}
   ],
   "competitive": {
     "games_lost": 0,
@@ -45,7 +45,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 43200
         },
-        {...}
+        {"..."}
       ],
       "games_won": [
         {
@@ -53,7 +53,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 28
         },
-        {...}
+        {"..."}
       ],
       "win_percentage": [
         {
@@ -61,7 +61,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 100
         },
-        {...}
+        {"..."}
       ],
       "weapon_accuracy": [
         {
@@ -69,7 +69,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 0.51
         },
-        {...}
+        {"..."}
       ],
       "eliminations_per_life": [
         {
@@ -77,7 +77,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 5
         },
-        {...}
+        {"..."}
       ],
       "multikill_best": [
         {
@@ -85,7 +85,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 4
         },
-        {...}
+        {"..."}
       ],
       "objective_kills_average": [
         {
@@ -93,7 +93,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 17.93
         },
-        {...}
+        {"..."}
       ]
     },
     "time_played_seconds": 140400,
@@ -148,7 +148,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 28800
         },
-        {...}
+        {"..."}
       ],
       "games_won": [
         {
@@ -156,7 +156,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 58
         },
-        {...}
+        {"..."}
       ],
       "weapon_accuracy": [
         {
@@ -164,7 +164,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 0.55
         },
-        {...}
+        {"..."}
       ],
       "eliminations_per_life": [
         {
@@ -172,7 +172,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 5.88
         },
-        {...}
+        {"..."}
       ],
       "multikill_best": [
         {
@@ -180,7 +180,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 6
         },
-        {...}
+        {"..."}
       ],
       "objective_kills_average": [
         {
@@ -188,7 +188,7 @@ These stats are from the `us` region for the professional Overwatch player `Seag
           "percentage": 1,
           "value": 22.17
         },
-        {...}
+        {"..."}
       ]
     },
     "time_played_seconds": 234000
