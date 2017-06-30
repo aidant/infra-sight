@@ -17,7 +17,7 @@ export default function (inp){
     .replace('elimination_', 'eliminations_')
     .replace('turret_destroyed', 'turrets_destroyed')
     .replace('&#xf6;', 'o')
-    .replace('&apos;d', '')
+    .replace('&apos;', '')
 
   if (suffix) {
     return `${prefix}_${suffix}`

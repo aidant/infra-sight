@@ -10,7 +10,7 @@ export default function (accountTag, region) {
   if (accountTag) {
     result.accountTag = accountTag.replace('~', '#');
     result.accountTagUrl = accountTag.replace('~', '-');
-    if (/^.{3,12}~[0-9]{4,6}$/.test(accountTag)) {
+    if (accountTag.match(/^.{3,12}~[0-9]{4,6}$/)) {
       result.platform = 'pc';
     }
   }
