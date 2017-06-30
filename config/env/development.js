@@ -1,3 +1,3 @@
 export default {
-  databaseUri: ``
+  databaseUri: `mongodb://localhost:27017/infra-sight`
 };
