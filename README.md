@@ -1,5 +1,6 @@
 # Infra-Sight
 [![GitHub](https://img.shields.io/github/issues/AidanT/Infra-Sight.svg)](https://github.com/AidanT/Infra-Sight/issues)
+
 An unofficial RESTful JSON API for Overwatch; Designed for applications like [Valkyrie](https://github.com/AidanT/Valkyrie).
 Infra-Sight is built in [Node.js](https://nodejs.org/) with [cheerio](https://github.com/cheeriojs/cheerio), [express](https://github.com/expressjs/express), [MongoDB](https://docs.mongodb.com/manual/administration/install-community/) and [Request-Promise](https://github.com/request/request-promise).
 
