@@ -230,7 +230,7 @@ cd infra-sight
 ```
 #### Create the network
 ```
-network create infra-sight_network
+docker network create infra-sight_network
 ```
 #### Start MongoDB
 Replace `some-mongo` with a cool name.
