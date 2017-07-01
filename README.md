@@ -1,32 +1,33 @@
 # Infra-Sight
 [![GitHub](https://img.shields.io/github/issues/AidanT/Infra-Sight.svg)](https://github.com/AidanT/Infra-Sight/issues)
 
-An unofficial RESTful JSON API for Overwatch; Designed for applications like [Valkyrie](https://github.com/AidanT/Valkyrie).
+### Why Infra-Sight?
 
-Infra-Sight is built in [Node.js](https://nodejs.org/) with [cheerio](https://github.com/cheeriojs/cheerio), [express](https://github.com/expressjs/express), [MongoDB](https://docs.mongodb.com/manual/administration/install-community/) and [Request-Promise](https://github.com/request/request-promise).
+I required an API for [Valkyrie](https://github.com/AidanT/Valkyrie) to interact with; After some research I failed to find any API’s that suited my needs, so I built my own.
 
 ### URL
 
 Coming soon™
 
 ### Note
-After the [Horizon Lunar Colony update](https://playoverwatch.com/en-us/game/patch-notes/pc/#patch-37456) the [playoverwatch](https://playoverwatch.com/en-us/) site incorrectly displays some new stats as `OVERWATCH.GUID.0X08600000000004BA`, `OF MATCH ON FIRE` and more.
+After the [Horizon Lunar Colony update](https://playoverwatch.com/en-us/game/patch-notes/pc/#patch-37456) the [playoverwatch](https://playoverwatch.com/en-us/) site incorrectly displays some new stats as `OVERWATCH.GUID.0X08600000000004BA`, `OF MATCH ON FIRE`...
 
 ## Routes
 When using a BattleTag replace `#` with `~`.
-> `/api/v1/profile/BattleTag~1234/region`
+> `/api/v1/profile/:account/:region`
 
 ### Valid regions:
 > `us`, `eu`, `kr`, `psn`, `xbl`
 
 ### Example:
 > `/api/v1/profile/Tracer~3939/us`
+> Returns Tracer#3939's us region .
 
 > `/api/v1/profile/Tracer~3939`
+> Returns Tracer#3939's profile with the highest level.
 
-## Example Result
-These stats are from the `us` region for the professional Overwatch player `Seagull#1894`
-[Check out the full result here](https://gist.github.com/AidanT/5935f8f929f2737f093d636750c02bc3)
+## Result
+This example is stats from A_Seagull’s `us` region. [Check out the full result](https://gist.github.com/AidanT/5935f8f929f2737f093d636750c02bc3).
 ```json
 {
   "career_stats": [
