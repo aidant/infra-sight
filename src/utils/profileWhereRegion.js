@@ -21,8 +21,10 @@ export default function(validRegions, region, user) {
       }
     })
     return account.profile;
-  } else {
+  } else if (validRegions[region]){
     return validRegions[region].profile;
+  } else {
+    return null;
   }
 
 }

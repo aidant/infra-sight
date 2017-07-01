@@ -21,6 +21,10 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
     user = Profile.create({ accountTag: params.accountTag })
   } else if(moment(Date.now()).diff(new Date(user.createdAt).getTime(), 'seconds') <= 600 && moment(Date.now()).diff(new Date(user.createdAt).getTime(), 'seconds') >= 0) {
     let sendAcount = getProfile(null, params.region, user);
+    if (sendAcount === null) {
+      res.status(404).json({});
+      return;
+    }
     res.json(sendAcount);
     return;
   } else {
@@ -81,6 +85,10 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
     user.save()
 
     let sendAcount = getProfile(validRegions, params.region);
+    if (sendAcount === null) {
+      res.status(404).json({});
+      return;
+    }
     res.json(sendAcount);
 
   })
