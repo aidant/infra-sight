@@ -48,7 +48,7 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
     let validRegions = {};
     let accountInfo = {};
 
-    if (search.length < 1) {
+    if (search.length < 1 || search.statusCode < 200 || search.statusCode >= 300) {
       res.status(404).json({});
       return;
     }
