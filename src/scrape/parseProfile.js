@@ -20,6 +20,8 @@ export default function (account) {
       let rank = $('.competitive-rank div').html();
       comp.games_won = $('#competitive td:contains("Games Won")').next().html();
       comp.games_played = $('#competitive td:contains("Games Played")').next().html();
+      comp.games_lost = $('#competitive td:contains("Games Lost")').next().html();
+      comp.games_tied = $('#competitive td:contains("Games Tied")').next().html();
       comp.time_played = $('#competitive td:contains("Time Played")').next().html();
       qp.games_won = $('#quickplay td:contains("Games Won")').next().html();
       qp.time_played = $('#quickplay td:contains("Time Played")').next().html();
@@ -34,19 +36,13 @@ export default function (account) {
       comp.career_stats = careerStats('competitive', $)
       let career_stats = qp.career_stats.concat(comp.career_stats)
 
-      comp.games_lost = 0
-      for (var i = 0; i < comp.career_stats.length; i++) {
-        if (comp.career_stats[i].hero === 'all' && comp.career_stats[i].stat === 'games_lost') {
-          comp.games_lost = comp.career_stats[i].value
-        }
-      }
-
       rank = parseNumber(rank);
       comp.games_won = parseNumber(comp.games_won) || 0;
-      qp.games_won = parseNumber(qp.games_won) || 0;
       comp.games_played = parseNumber(comp.games_played) || 0;
-      comp.games_tied = comp.games_played - (comp.games_won + comp.games_lost);
+      comp.games_lost = parseNumber(comp.games_lost) || 0;
+      comp.games_tied = parseNumber(comp.games_tied) || 0;
       comp.time_played_seconds = toSeconds(comp.time_played) || 0;
+      qp.games_won = parseNumber(qp.games_won) || 0;
       qp.time_played_seconds = toSeconds(qp.time_played) || 0;
       images.level_border = images.level_border.slice(21, 109);
 
