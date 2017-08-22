@@ -1,10 +1,10 @@
 import toName from '../utils/toName';
 import toNumber from '../utils/toNumber'
 
-export default function(mode, $) {
+export default function(gamemode, $) {
   let result = {};
 
-  $(`#${mode} .hero-comparison-section .toggle-display`).children()
+  $(`#${gamemode} .hero-comparison-section .toggle-display`).children()
   .each((i, el) => {
     let id = toName($(el).parent().attr('data-category-id'))
     result[id] = result[id] || [];

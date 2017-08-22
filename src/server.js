@@ -1,19 +1,21 @@
-import express from 'express'
-import rp from 'request-promise'
 import Bluebird from 'bluebird';
-import Profile from './schema/Profile';
+import express from 'express'
 import moment from 'moment';
+import morgan from 'morgan';
+import rp from 'request-promise'
 
-import parseProfile from './scrape/parseProfile'
 import getParams from './utils/params';
 import getProfile from './utils/profileWhereRegion';
+import parseProfile from './scrape/parseProfile'
+import Profile from './schema/Profile';
 
 const app = express();
 const port = 3000;
 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+
 app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], async (req, res) => {
   let params = getParams(req.params.accountTag, req.params.region);
-  console.log(`Account: ${params.accountTag} Region: ${params.region}`)
 
   let user = await Profile.find({ accountTag: params.accountTag }, {sort: '-createdAt', limit: 1})
   user = user[0]

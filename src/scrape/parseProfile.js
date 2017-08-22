@@ -44,10 +44,10 @@ export default function (account) {
       comp.time_played_seconds = toSeconds(comp.time_played) || 0;
       qp.games_won = parseNumber(qp.games_won) || 0;
       qp.time_played_seconds = toSeconds(qp.time_played) || 0;
-      images.level_border = images.level_border.slice(21, 109);
+      images.level_border = images.level_border.slice(21, 112);
 
       if (images.level_star) {
-        images.level_star = images.level_star.slice(21, 107)
+        images.level_star = images.level_star.slice(21, 110)
       } else {
         images.level_star = null
       }
@@ -57,37 +57,42 @@ export default function (account) {
       }
 
       const Profile = {
-                        career_stats,
-                        competitive: {
-                          games_lost: comp.games_lost,
-                          games_played: comp.games_played,
-                          games_tied: comp.games_tied,
-                          games_won: comp.games_won,
-                          heroes: comp.heroes,
-                          time_played_seconds: comp.time_played_seconds,
-                          rank
-                        },
-                        images: {
-                          heroes: images.heroes,
-                          portrait: {
-                            border: images.level_border,
-                            star: images.level_star
-                          },
-                          player_icon: account.portrait,
-                          rank: images.rank
-                        },
-                        profile:{
-                          platform_username: account.platform_username,
-                          level: account.level,
-                          url: account.url,
-                          username
-                        },
-                        quickplay: { //missing games_played games_lost
-                          games_won: qp.games_won,
-                          heroes: qp.heroes,
-                          time_played_seconds: qp.time_played_seconds
-                        }
-                      };
+        career_stats,
+        competitive: {
+          games: {
+            lost: comp.games_lost,
+            played: comp.games_played,
+            tied: comp.games_tied,
+            won: comp.games_won
+          },
+          heroes: comp.heroes,
+          time_played_seconds: comp.time_played_seconds,
+          rank
+        },
+        images: {
+          color: images.heroes.color,
+          heroes: images.heroes.url,
+          portrait: {
+            border: images.level_border,
+            star: images.level_star
+          },
+          player_icon: account.portrait,
+          rank: images.rank
+        },
+        profile:{
+          platform_username: account.platform_username,
+          level: account.level,
+          url: account.url,
+          username
+        },
+        quickplay: {
+          games: {
+            won: qp.games_won
+          },
+          heroes: qp.heroes,
+          time_played_seconds: qp.time_played_seconds
+        }
+      };
 
       resolve(Profile)
     } catch (e) {
