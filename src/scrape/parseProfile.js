@@ -44,17 +44,12 @@ export default function (account) {
       comp.time_played_seconds = toSeconds(comp.time_played) || 0;
       qp.games_won = parseNumber(qp.games_won) || 0;
       qp.time_played_seconds = toSeconds(qp.time_played) || 0;
-      images.level_border = images.level_border.slice(21, 112);
+      images.level_border = images.level_border.replace(/(background-image:url\()(.+)(\))/, '$2');
 
-      if (images.level_star) {
-        images.level_star = images.level_star.slice(21, 110)
-      } else {
-        images.level_star = null
-      }
-
-      if (account.level < 101 || (account.level > 600 && account.level < 701) || (account.level > 1200 && account.level < 1301)) {
-        images.level_star = null
-      }
+      if (images.level_star && Math.floor((account.level - 1) % 600 / 100) > 0)
+        images.level_star = images.level_star.replace(/(background-image:url\()(.+)(\))/, '$2');
+      else
+        images.level_star = null;
 
       const Profile = {
         career_stats,

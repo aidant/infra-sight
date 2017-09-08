@@ -12,7 +12,7 @@ import Profile from './schema/Profile';
 const app = express();
 const port = 3000;
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(morgan(':method :url :response-time ms :status'))
 
 app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], async (req, res) => {
   let params = getParams(req.params.accountTag, req.params.region);
