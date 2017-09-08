@@ -1,17 +1,31 @@
 {
+  "name": "infra-sight",
+  "version": "1.0.0",
+  "description": "An unofficial API for Overwatch.",
+  "main": "app.js",
   "scripts": {
     "start": "gulp serve",
     "build": "gulp"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AidanT/Infra-Sight.git"
+  },
+  "author": "LazyGamer",
+  "bugs": {
+    "url": "https://github.com/AidanT/Infra-Sight/issues"
+  },
+  "homepage": "https://github.com/AidanT/Infra-Sight#readme",
   "dependencies": {
-    "apicache": "^0.8.6",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.17.1",
+    "camo": "^0.12.3",
     "cheerio": "^0.22.0",
-    "express": "^4.15.2",
+    "css-color-converter": "^1.1.0",
+    "express": "^4.15.3",
     "moment": "^2.18.1",
+    "morgan": "^1.8.2",
     "request": "^2.81.0",
-    "request-promise": "^4.2.0"
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -39,7 +53,8 @@
   },
   "babel": {
     "presets": [
-      "camo"
+      "camo",
+      "stage-2"
     ],
     "plugins": [
       "add-module-exports",
