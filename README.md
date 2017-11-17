@@ -1,7 +1,7 @@
 # Infra-Sight
 [![GitHub](https://img.shields.io/github/issues/AidanT/Infra-Sight.svg)](https://github.com/AidanT/Infra-Sight/issues)
 
-# Do not use in production
+## Do not use in production
 
 ## Routes
 When using a BattleTag replace `#` with `~`.

@@ -1,5 +1,4 @@
 export default function (id) {
-
   let NAMES = {
     '0x02E00000FFFFFFFF': 'all',
     '0x02E0000000000002': 'reaper',
@@ -27,6 +26,7 @@ export default function (id) {
     '0x02E000000000013B': 'ana',
     '0x02E000000000013E': 'orisa',
     '0x02E000000000012F': 'doomfist',
+    '0x02E00000000001A2': 'moira',
     'overwatch.guid.0x0860000000000021': 'time_played_seconds',
     'overwatch.guid.0x0860000000000039': 'games_won',
     'overwatch.guid.0x086000000000002F': 'weapon_accuracy',
@@ -34,7 +34,6 @@ export default function (id) {
     'overwatch.guid.0x0860000000000346': 'multikill_best',
     'overwatch.guid.0x086000000000039C': 'objective_kills_average',
     'overwatch.guid.0x08600000000003D1': 'win_percentage'
-  };
-
-  return NAMES[id] || undefined
-};
+  }
+  return NAMES[id]
+}

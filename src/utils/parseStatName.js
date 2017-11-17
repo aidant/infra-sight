@@ -1,12 +1,11 @@
-export default function (inp){
-
+export default function (inp) {
   let name = inp
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '_')
     .match(/^(.+?)?(?:_+-_+(.+))?$/)
 
-  let suffix = name[2];
+  let suffix = name[2]
   let prefix = name[1]
     .replace(/(assist|blow|card|death|hit|kill|medal|elimination)s?$/, '$1s')
     .replace('shots_hits', 'shots_hit')
@@ -20,13 +19,12 @@ export default function (inp){
     .replace('_ultimates_', 'ultimate_')
     .replace('multikills_best', 'multikill_best')
     .replace('turret_destroyed', 'turrets_destroyed')
-    .replace('&#xf6;', 'o')
-    .replace('&apos;', '')
+    .replace('&#xf6', 'o')
+    .replace('&apos', '')
 
   if (suffix) {
     return `${prefix}_${suffix}`
   } else {
     return prefix
   }
-
 }

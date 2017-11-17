@@ -1,14 +1,13 @@
-import moment from 'moment';
+import moment from 'moment'
 
 export default function (inp, stat) {
-
-  let id = '';
-  let result = {};
+  let id = ''
+  let result = {}
 
   stat = stat
   .split('_')
 
-  for (var i = 0; i < stat.length; i++) {
+  for (let i = 0; i < stat.length; i++) {
     if (stat[i] === 'time') {
       id = 'time'
     }
@@ -18,19 +17,15 @@ export default function (inp, stat) {
   }
 
   if (id === 'time') {
-
     inp = inp
     .split(' ')
 
     if (inp.length > 1) {
-
       inp[0] = parseFloat(inp[0])
       result.value = moment.duration(inp[0], inp[1]).as('seconds')
       stat.push('seconds')
       result.stat = stat.join('_')
-
     } else {
-
       let time = inp[0].split(':').reverse()
       let timeCorrected = []
 
@@ -42,27 +37,21 @@ export default function (inp, stat) {
       result.value = moment.duration(timeCorrected).as('seconds')
       stat.push('seconds')
       result.stat = stat.join('_')
-
     }
-
   }
 
   if (id === 'accuracy') {
-
     inp = inp
     .replace('%', '')
     result.value = parseFloat(inp) / 100
     result.stat = stat.join('_')
-
   }
 
   if (id === '') {
-
     inp = inp
     .replace(/,/g, '')
     result.value = parseFloat(inp)
     result.stat = stat.join('_')
-
   }
   return result
 }

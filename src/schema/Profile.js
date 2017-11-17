@@ -1,18 +1,18 @@
-import { Document, ValidationError } from 'camo';
+import { Document, ValidationError } from 'camo'
 
 export default class Profile extends Document {
   constructor() {
-    super();
+    super()
 
     this.createdAt = {
       type: Date,
       default: Date.now(),
       required: true,
-    };
+    }
 
     this.accountTag = {
       type: String,
-    };
+    }
 
     this.us =  {
       type: Object,
@@ -37,7 +37,7 @@ export default class Profile extends Document {
   }
 
   static collectionName() {
-    return 'profile';
+    return 'profile'
   }
 
   postValidate() {
