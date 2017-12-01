@@ -34,7 +34,7 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
   }
 
   let requests = []
-  requests.push(rp({uri: encodeURI(`https://playoverwatch.com/en-us/search/account-by-name/${params.accountTagUrl}`), json: true, simple: false, resolveWithFullResponse: true}))
+  requests.push(rp({uri: `https://playoverwatch.com/en-us/search/account-by-name/${encodeURIComponent(params.accountTag)}`, json: true, simple: false, resolveWithFullResponse: true}))
   if (params.platform === 'pc') {
     requests.push(rp({uri: encodeURI(`https://playoverwatch.com/en-us/career/pc/us/${params.accountTagUrl}`), simple: false, resolveWithFullResponse: true}))
     requests.push(rp({uri: encodeURI(`https://playoverwatch.com/en-us/career/pc/eu/${params.accountTagUrl}`), simple: false, resolveWithFullResponse: true}))
