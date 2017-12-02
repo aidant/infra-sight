@@ -34,6 +34,10 @@ export default class Profile extends Document {
       type: Object,
     }
 
+    this.pc =  {
+      type: Object,
+    }
+
   }
 
   static collectionName() {

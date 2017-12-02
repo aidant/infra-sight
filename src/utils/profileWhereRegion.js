@@ -3,7 +3,7 @@ export default function (validRegions, region, user) {
 
   if (validRegions === null) {
     validRegions = {}
-    let regions = ['us', 'eu', 'kr', 'psn', 'xbl']
+    let regions = ['us', 'eu', 'kr', 'psn', 'xbl', 'pc']
 
     for (let i = 0; i < regions.length; i++) {
       if (user[regions[i]]) {
