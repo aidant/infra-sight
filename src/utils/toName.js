@@ -27,6 +27,7 @@ export default function (id) {
     '0x02E000000000013E': 'orisa',
     '0x02E000000000012F': 'doomfist',
     '0x02E00000000001A2': 'moira',
+    '0x02E0000000000195': 'brigitte',
     'overwatch.guid.0x0860000000000021': 'time_played_seconds',
     'overwatch.guid.0x0860000000000039': 'games_won',
     'overwatch.guid.0x086000000000002F': 'weapon_accuracy',
