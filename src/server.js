@@ -56,7 +56,7 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
     }
 
     for (let i = 0; i < search.body.length; i++) {
-      accountInfo[search.body[i].careerLink.split('/').reverse()[1]] = search.body[i]
+      accountInfo[search.body[i].platform] = search.body[i]
     }
 
     for (let i = 0; i < regions.length; i++) {
@@ -68,7 +68,7 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
           path: regions[i].request.uri.path,
           level: accountInfo[tmp.region].level,
           portrait: accountInfo[tmp.region].portrait,
-          platform_username: accountInfo[tmp.region].platformDisplayName,
+          platform_username: accountInfo[tmp.region].name,
           accountTag: params.accountTag,
           url: regions[i].request.uri.href
         }
