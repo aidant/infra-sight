@@ -4,7 +4,7 @@ import toNumber from '../utils/toNumber'
 export default function (gamemode, $) {
   let result = {}
 
-  $(`#${gamemode} .hero-comparison-section .toggle-display`).children()
+  $(`#${gamemode} .progress-category.toggle-display`).children()
   .each((i, el) => {
     let id = toName($(el).parent().attr('data-category-id'))
     result[id] = result[id] || []
