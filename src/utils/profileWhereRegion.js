@@ -20,9 +20,9 @@ export default function (validRegions, region, user) {
         level = el.level
       }
     })
-    return account.profile
+    return account
   } else if (validRegions[region]) {
-    return validRegions[region].profile
+    return validRegions[region]
   } else {
     return null
   }

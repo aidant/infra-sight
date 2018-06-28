@@ -69,6 +69,7 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
           level: accountInfo[tmp.region].level,
           portrait: accountInfo[tmp.region].portrait,
           platform_username: accountInfo[tmp.region].name,
+          visibility: accountInfo[tmp.region].visibility,
           accountTag: params.accountTag,
           url: regions[i].request.uri.href
         }
@@ -84,14 +85,19 @@ app.get(['/api/v1/profile/:accountTag', '/api/v1/profile/:accountTag/:region'], 
     Object.values(validRegions).forEach((el, i) => {
       user[Object.keys(validRegions)[i]] = el
     })
+    let sendAcount = getProfile(validRegions, params.region)
+    if (!sendAcount.visibility.isPublic) {
+      res.status(401).json({})
+      return
+    }
     user.save()
 
-    let sendAcount = getProfile(validRegions, params.region)
+
     if (sendAcount === null) {
       res.status(404).json({})
       return
     }
-    res.json(sendAcount)
+    res.json(sendAcount.profile)
   })
   .catch(e => {
     console.error(e)
