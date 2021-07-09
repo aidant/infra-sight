@@ -1,0 +1,399 @@
+frameworkVersion: '2'
+variablesResolutionMode: 20210326
+
+service: infra-sight
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  esbuild:
+    target: node12
+    sourcemap: true
+  
+  name: ${self:service}-${opt:stage, self:provider.stage}
+  domain: ${self:custom.stage.${opt:stage, self:provider.stage}.domain}
+  stage:
+    production:
+      domain: ${env:DOMAIN_NAME_PRODUCTION, 'infra-sight.api.aidan.pro'}
+    staging:
+      domain: ${env:DOMAIN_NAME_STAGING, 'infra-sight.api.staging.aidan.pro'}
+    development:
+      domain: ${env:DOMAIN_NAME_DEVELOPMENT, 'infra-sight.api.development.aidan.pro'}
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: development
+  region: us-east-1
+  stackName: ${self:custom.name}
+  apiName: ${self:custom.name}
+  timeout: 28
+  lambdaHashingVersion: 20201221
+  environment:
+    AWS_BUCKET: !Ref Bucket
+    INFRA_SIGHT_API_URL:
+      !Join
+        - ''
+        - - https://
+          - ${self:custom.domain}
+          - /
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - !GetAtt 
+              - Bucket
+              - Arn
+            - !Join
+              - /
+              - - !GetAtt 
+                  - Bucket
+                  - Arn
+                - v2
+                - cdn
+                - '*'
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource:
+            - !Join
+              - /
+              - - !GetAtt 
+                  - Bucket
+                  - Arn
+                - v2
+                - cdn
+                - '*'
+  httpApi:
+    name: ${self:custom.name}
+
+package:
+  individually: true
+
+functions:
+  SearchOverwatchAccounts:
+    handler: src/search-overwatch-accounts.searchOverwatchAccounts
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/accounts/{username}/search
+
+  GetOverwatchAccount:
+    handler: src/get-overwatch-account.getOverwatchAccount
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/accounts/{username}/latest
+
+  GetOverwatchHeroes:
+    handler: src/get-overwatch-heroes.getOverwatchHeroes
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/heroes/latest
+
+  GetOverwatchPlayerIcons:
+    handler: src/get-overwatch-player-icons.getOverwatchPlayerIcons
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/player-icons/latest
+
+  GetOverwatchProfile:
+    handler: src/get-overwatch-profile.getOverwatchProfile
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/profiles/{username}/latest
+
+  ListOverwatchAccountHistory:
+    handler: src/list-overwatch-account-history.listOverwatchAccountHistory
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/accounts/{username}/history
+
+  ListOverwatchHeroesHistory:
+    handler: src/list-overwatch-heroes-history.listOverwatchHeroesHistory
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/heroes/history
+
+  ListOverwatchPlayerIconsHistory:
+    handler: src/list-overwatch-player-icons-history.listOverwatchPlayerIconsHistory
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/player-icons/history
+
+  ListOverwatchProfileHistory:
+    handler: src/list-overwatch-profile-history.listOverwatchProfileHistory
+    events:
+      - httpApi:
+          method: GET
+          path: /v2/api/overwatch/profiles/{username}/history
+
+resources:
+  Resources:
+    Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods: 
+                - GET
+              AllowedOrigins:
+                - '*'
+
+    CloudFrontBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref Bucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Action:
+                - s3:GetObject
+              Effect: Allow
+              Resource:
+                - !Join
+                  - /
+                  - - !GetAtt 
+                      - Bucket
+                      - Arn
+                    - metadata.json
+                - !Join
+                  - /
+                  - - !GetAtt 
+                      - Bucket
+                      - Arn
+                    - v2
+                    - cdn
+                    - '*'
+              Principal:
+                CanonicalUser:
+                  !GetAtt 
+                    - CloudFrontOriginAccessIdentity
+                    - S3CanonicalUserId
+      DependsOn:
+        - CloudFrontOriginAccessIdentity
+
+    CloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: ''
+
+    CloudFrontCachePolicyOverwatchAccountOptions:
+      Type: AWS::CloudFront::CachePolicy
+      Properties:
+        CachePolicyConfig:
+          Name: ${self:custom.name}-CachingOptimizedForUncompressedObjects-OverwatchAccountOptions
+          DefaultTTL: 86400
+          MaxTTL: 31536000
+          MinTTL: 1
+          ParametersInCacheKeyAndForwardedToOrigin:
+            CookiesConfig:
+              CookieBehavior: none
+            EnableAcceptEncodingBrotli: false
+            EnableAcceptEncodingGzip: false
+            HeadersConfig:
+              HeaderBehavior: none
+            QueryStringsConfig:
+              QueryStringBehavior: whitelist
+              QueryStrings:
+                - platform
+                - resolution_strategy
+
+    CloudFrontCachePolicyInfraSightPaginationOptions:
+      Type: AWS::CloudFront::CachePolicy
+      Properties:
+        CachePolicyConfig:
+          Name: ${self:custom.name}-CachingOptimizedForUncompressedObjects-InfraSightPaginationOptions
+          DefaultTTL: 86400
+          MaxTTL: 31536000
+          MinTTL: 1
+          ParametersInCacheKeyAndForwardedToOrigin:
+            CookiesConfig:
+              CookieBehavior: none
+            EnableAcceptEncodingBrotli: false
+            EnableAcceptEncodingGzip: false
+            HeadersConfig:
+              HeaderBehavior: none
+            QueryStringsConfig:
+              QueryStringBehavior: whitelist
+              QueryStrings:
+                - token
+
+    CloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Aliases:
+            - ${self:custom.domain}
+          CacheBehaviors:
+            - PathPattern: /v2/api/overwatch/accounts/*/search
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/accounts/*/latest
+              CachePolicyId: !GetAtt 
+                - CloudFrontCachePolicyOverwatchAccountOptions
+                - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/heroes/latest
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/player-icons/latest
+              CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/profiles/*/latest
+              CachePolicyId:
+                !GetAtt 
+                  - CloudFrontCachePolicyOverwatchAccountOptions
+                  - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/accounts/*/history
+              CachePolicyId: !GetAtt 
+                - CloudFrontCachePolicyInfraSightPaginationOptions
+                - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/heroes/history
+              CachePolicyId: !GetAtt 
+                - CloudFrontCachePolicyInfraSightPaginationOptions
+                - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/player-icons/history
+              CachePolicyId: !GetAtt 
+                - CloudFrontCachePolicyInfraSightPaginationOptions
+                - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+            - PathPattern: /v2/api/overwatch/profiles/*/history
+              CachePolicyId: !GetAtt 
+                - CloudFrontCachePolicyInfraSightPaginationOptions
+                - Id
+              OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
+              TargetOriginId:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+              ViewerProtocolPolicy: redirect-to-https
+          DefaultCacheBehavior:
+            CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
+            OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
+            TargetOriginId:
+              !Join
+                - ''
+                - - S3-
+                  - !Ref Bucket
+                  - .s3.
+                  - !Ref AWS::Region
+                  - .amazonaws.com
+            ViewerProtocolPolicy: redirect-to-https
+          DefaultRootObject: metadata.json
+          Enabled: true
+          HttpVersion: http2
+          IPV6Enabled: true
+          Origins:
+            - S3OriginConfig:
+                OriginAccessIdentity:
+                  !Join
+                    - /
+                    - - origin-access-identity/cloudfront
+                      - !Ref CloudFrontOriginAccessIdentity
+              DomainName:
+                !Join
+                  - ''
+                  - - !Ref Bucket
+                    - .s3.
+                    - !Ref AWS::Region
+                    - .amazonaws.com
+              Id:
+                !Join
+                  - ''
+                  - - S3-
+                    - !Ref Bucket
+                    - .s3.
+                    - !Ref AWS::Region
+                    - .amazonaws.com
+            - CustomOriginConfig:
+                OriginProtocolPolicy: https-only
+              DomainName:
+                !Select
+                  - 1
+                  - !Split
+                    - ://
+                    - !GetAtt 
+                      - HttpApi
+                      - ApiEndpoint
+              Id:
+                !Join 
+                  - ''
+                  - - API-
+                    - !Ref HttpApi
+          ViewerCertificate:
+            AcmCertificateArn: !Ref CloudFrontCertificate
+            MinimumProtocolVersion: TLSv1.2_2019
+            SslSupportMethod: sni-only
+      DependsOn:
+        - CloudFrontOriginAccessIdentity
+
+    CloudFrontCertificate:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: ${self:custom.domain}
+        ValidationMethod: DNS

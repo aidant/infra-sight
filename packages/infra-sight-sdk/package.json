@@ -1,0 +1,31 @@
+{
+  "name": "@infra-sight/sdk",
+  "version": "2.0.0-alpha.0",
+  "description": "Infra-Sight is an elegant UX focused API for Overwatch.",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "directory": "packages/infra-sight-sdk",
+    "type": "git",
+    "url": "https://github.com/aidant/infra-sight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aidant/infra-sight/issues"
+  },
+  "homepage": "https://github.com/aidant/infra-sight#readme",
+  "keywords": [
+    "overwatch",
+    "api"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "types": "lib/index.d.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}

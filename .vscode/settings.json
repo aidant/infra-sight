@@ -1,0 +1,8 @@
+{
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.addMissingImports": true
+  },
+}

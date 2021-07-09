@@ -1,0 +1,8 @@
+{
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm --workspaces run build"
+  }
+}
