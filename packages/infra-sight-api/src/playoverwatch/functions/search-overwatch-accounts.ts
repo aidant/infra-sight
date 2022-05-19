@@ -47,7 +47,7 @@ export const searchOverwatchAccounts: SearchOverwatchAccounts =
       const account = {
         name: overwatchAccount.name,
         level: overwatchAccount.level,
-        portrait: playerIcons[overwatchAccount.portrait].url,
+        portrait: playerIcons[overwatchAccount.portrait]?.url || null,
         is_public: overwatchAccount.isPublic,
         platform: overwatchAccount.platform.replace(
           'nintendo-switch',
@@ -63,7 +63,7 @@ export const searchOverwatchAccounts: SearchOverwatchAccounts =
       the level is most likely the only difference between these accounts). 
     */
       const level = levels.get(account.playoverwatch_url) || -Infinity
-      if (level > account.level) continue
+      if (level >= account.level) continue
 
       levels.set(account.playoverwatch_url, account.level)
       accounts.push(account)

@@ -24,5 +24,9 @@ export const parseProfile = (
     top_heroes: parseTopHeroes($),
   }
 
+  if (!profile.account.portrait) {
+    profile.account.portrait = $('img.player-portrait').attr().src || null
+  }
+
   return validate<InfraSightProfile>(InfraSightProfileSchema, profile)
 }
