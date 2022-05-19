@@ -11,10 +11,15 @@ export const parseSkillRating = ($: CheerioAPI): InfraSightSkillRating => {
     support: null,
   }
 
-  $('.masthead-player-progression:not(.masthead-player-progression--mobile) .competitive-rank .competitive-rank-role').each((i, e) => {
-    const role = $('.competitive-rank-tier', e).attr()['data-ow-tooltip-text'].toLowerCase().split(' ')[0]
+  $(
+    '.masthead-player-progression:not(.masthead-player-progression--mobile) .competitive-rank .competitive-rank-role'
+  ).each((i, e) => {
+    const role = $('.competitive-rank-tier', e)
+      .attr()
+      ['data-ow-tooltip-text'].toLowerCase()
+      .split(' ')[0]
     const value = parseNumber($('.competitive-rank-level', e).text())
-    
+
     sr[role as keyof InfraSightSkillRating] = value
   })
 

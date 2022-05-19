@@ -12,16 +12,17 @@ export const playoverwatch = async (request: string, init?: RequestInit) => {
 }
 
 playoverwatch.json = (request: string, init?: RequestInit) => {
-  return playoverwatch(request, init).then(response => response.json())
+  return playoverwatch(request, init).then((response) => response.json())
 }
 playoverwatch.html = (request: string, init?: RequestInit) => {
-  return playoverwatch(request, init).then(response => response.text()).then(html => cheerio.load(html))
+  return playoverwatch(request, init)
+    .then((response) => response.text())
+    .then((html) => cheerio.load(html))
 }
 
 export const getCareerProfileUrl = (rawName: string, platform: OverwatchPlatform) => {
-  const name = platform === 'pc'
-    ? encodeURIComponent(rawName.replace('#', '-'))
-    : encodeURIComponent(rawName)
+  const name =
+    platform === 'pc' ? encodeURIComponent(rawName.replace('#', '-')) : encodeURIComponent(rawName)
   return `https://playoverwatch.com/en-us/career/${platform}/${name}`
 }
 

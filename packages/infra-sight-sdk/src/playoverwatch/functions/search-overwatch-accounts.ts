@@ -7,13 +7,20 @@ export interface SearchOverwatchAccountsOptions {
   username: string
 }
 
-export function validateSearchOverwatchAccountsOptions (options: SearchOverwatchAccountsOptions): asserts options is SearchOverwatchAccountsOptions {
+export function validateSearchOverwatchAccountsOptions(
+  options: SearchOverwatchAccountsOptions
+): asserts options is SearchOverwatchAccountsOptions {
   if (typeof options?.username !== 'string') {
-    throw new InfraSightError(ErrorCode.InfraSightInvalidOptions, { options: ['username'] })
+    throw new InfraSightError(ErrorCode.InfraSightInvalidOptions, {
+      options: ['username'],
+    })
   }
 }
 
-export type SearchOverwatchAccounts = (this: InfraSightAPI, options: SearchOverwatchAccountsOptions) => Promise<InfraSightAccountList>
+export type SearchOverwatchAccounts = (
+  this: InfraSightAPI,
+  options: SearchOverwatchAccountsOptions
+) => Promise<InfraSightAccountList>
 
 export const searchOverwatchAccounts: SearchOverwatchAccounts = async ({ username }) => {
   validateSearchOverwatchAccountsOptions({ username })

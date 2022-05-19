@@ -11,4 +11,5 @@ const getEnvironmentVariable = (name: string): string | null => {
   }
 }
 
-export const INFRA_SIGHT_API_URL = getEnvironmentVariable('INFRA_SIGHT_API_URL') ?? 'https://infra-sight.api.aidan.pro/'
+export const INFRA_SIGHT_API_URL =
+  getEnvironmentVariable('INFRA_SIGHT_API_URL') ?? 'https://infra-sight.api.aidan.pro/'

@@ -11,7 +11,7 @@ custom:
   esbuild:
     target: node12
     sourcemap: true
-  
+
   name: ${self:service}-${opt:stage, self:provider.stage}
   domain: ${self:custom.stage.${opt:stage, self:provider.stage}.domain}
   stage:
@@ -33,12 +33,11 @@ provider:
   lambdaHashingVersion: 20201221
   environment:
     AWS_BUCKET: !Ref Bucket
-    INFRA_SIGHT_API_URL:
-      !Join
-        - ''
-        - - https://
-          - ${self:custom.domain}
-          - /
+    INFRA_SIGHT_API_URL: !Join
+      - ''
+      - - https://
+        - ${self:custom.domain}
+        - /
   iam:
     role:
       statements:
@@ -46,12 +45,12 @@ provider:
           Action:
             - s3:ListBucket
           Resource:
-            - !GetAtt 
+            - !GetAtt
               - Bucket
               - Arn
             - !Join
               - /
-              - - !GetAtt 
+              - - !GetAtt
                   - Bucket
                   - Arn
                 - v2
@@ -63,7 +62,7 @@ provider:
           Resource:
             - !Join
               - /
-              - - !GetAtt 
+              - - !GetAtt
                   - Bucket
                   - Arn
                 - v2
@@ -146,7 +145,7 @@ resources:
       Properties:
         CorsConfiguration:
           CorsRules:
-            - AllowedMethods: 
+            - AllowedMethods:
                 - GET
               AllowedOrigins:
                 - '*'
@@ -164,23 +163,22 @@ resources:
               Resource:
                 - !Join
                   - /
-                  - - !GetAtt 
+                  - - !GetAtt
                       - Bucket
                       - Arn
                     - metadata.json
                 - !Join
                   - /
-                  - - !GetAtt 
+                  - - !GetAtt
                       - Bucket
                       - Arn
                     - v2
                     - cdn
                     - '*'
               Principal:
-                CanonicalUser:
-                  !GetAtt 
-                    - CloudFrontOriginAccessIdentity
-                    - S3CanonicalUserId
+                CanonicalUser: !GetAtt
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
       DependsOn:
         - CloudFrontOriginAccessIdentity
 
@@ -241,108 +239,97 @@ resources:
             - PathPattern: /v2/api/overwatch/accounts/*/search
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/accounts/*/latest
-              CachePolicyId: !GetAtt 
+              CachePolicyId: !GetAtt
                 - CloudFrontCachePolicyOverwatchAccountOptions
                 - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/heroes/latest
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/player-icons/latest
               CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/profiles/*/latest
-              CachePolicyId:
-                !GetAtt 
-                  - CloudFrontCachePolicyOverwatchAccountOptions
-                  - Id
+              CachePolicyId: !GetAtt
+                - CloudFrontCachePolicyOverwatchAccountOptions
+                - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/accounts/*/history
-              CachePolicyId: !GetAtt 
+              CachePolicyId: !GetAtt
                 - CloudFrontCachePolicyInfraSightPaginationOptions
                 - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/heroes/history
-              CachePolicyId: !GetAtt 
+              CachePolicyId: !GetAtt
                 - CloudFrontCachePolicyInfraSightPaginationOptions
                 - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/player-icons/history
-              CachePolicyId: !GetAtt 
+              CachePolicyId: !GetAtt
                 - CloudFrontCachePolicyInfraSightPaginationOptions
                 - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
             - PathPattern: /v2/api/overwatch/profiles/*/history
-              CachePolicyId: !GetAtt 
+              CachePolicyId: !GetAtt
                 - CloudFrontCachePolicyInfraSightPaginationOptions
                 - Id
               OriginRequestPolicyId: 59781a5b-3903-41f3-afcb-af62929ccde1
-              TargetOriginId:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              TargetOriginId: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
               ViewerProtocolPolicy: redirect-to-https
           DefaultCacheBehavior:
             CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d
             OriginRequestPolicyId: 88a5eaf4-2fd4-4709-b370-b4c650ea3fcf
-            TargetOriginId:
-              !Join
-                - ''
-                - - S3-
-                  - !Ref Bucket
-                  - .s3.
-                  - !Ref AWS::Region
-                  - .amazonaws.com
+            TargetOriginId: !Join
+              - ''
+              - - S3-
+                - !Ref Bucket
+                - .s3.
+                - !Ref AWS::Region
+                - .amazonaws.com
             ViewerProtocolPolicy: redirect-to-https
           DefaultRootObject: metadata.json
           Enabled: true
@@ -350,41 +337,36 @@ resources:
           IPV6Enabled: true
           Origins:
             - S3OriginConfig:
-                OriginAccessIdentity:
-                  !Join
-                    - /
-                    - - origin-access-identity/cloudfront
-                      - !Ref CloudFrontOriginAccessIdentity
-              DomainName:
-                !Join
-                  - ''
-                  - - !Ref Bucket
-                    - .s3.
-                    - !Ref AWS::Region
-                    - .amazonaws.com
-              Id:
-                !Join
-                  - ''
-                  - - S3-
-                    - !Ref Bucket
-                    - .s3.
-                    - !Ref AWS::Region
-                    - .amazonaws.com
+                OriginAccessIdentity: !Join
+                  - /
+                  - - origin-access-identity/cloudfront
+                    - !Ref CloudFrontOriginAccessIdentity
+              DomainName: !Join
+                - ''
+                - - !Ref Bucket
+                  - .s3.
+                  - !Ref AWS::Region
+                  - .amazonaws.com
+              Id: !Join
+                - ''
+                - - S3-
+                  - !Ref Bucket
+                  - .s3.
+                  - !Ref AWS::Region
+                  - .amazonaws.com
             - CustomOriginConfig:
                 OriginProtocolPolicy: https-only
-              DomainName:
-                !Select
-                  - 1
-                  - !Split
-                    - ://
-                    - !GetAtt 
-                      - HttpApi
-                      - ApiEndpoint
-              Id:
-                !Join 
-                  - ''
-                  - - API-
-                    - !Ref HttpApi
+              DomainName: !Select
+                - 1
+                - !Split
+                  - ://
+                  - !GetAtt
+                    - HttpApi
+                    - ApiEndpoint
+              Id: !Join
+                - ''
+                - - API-
+                  - !Ref HttpApi
           ViewerCertificate:
             AcmCertificateArn: !Ref CloudFrontCertificate
             MinimumProtocolVersion: TLSv1.2_2019

@@ -20,9 +20,11 @@ export const get = async <T>(path: string, params: Params = {}): Promise<T> => {
   return response.json()
 }
 
-export async function * list (path: string, { page_token }: InfraSightPaginationOptions) {
+export async function* list(path: string, { page_token }: InfraSightPaginationOptions) {
   do {
-    const response = await get<InfraSightPaginationResponse>(path, { page_token })
+    const response = await get<InfraSightPaginationResponse>(path, {
+      page_token,
+    })
     page_token = response.page_token
     yield* response.items
   } while (page_token)

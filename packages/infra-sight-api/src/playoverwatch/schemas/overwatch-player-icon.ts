@@ -10,5 +10,5 @@ export const OverwatchPlayerIconSchema: Joi.ObjectSchema<OverwatchPlayerIcon> = 
   event: {
     name: Joi.string(),
   },
-  icon: Joi.string()
+  icon: Joi.string(),
 }).options({ presence: 'required', stripUnknown: true })

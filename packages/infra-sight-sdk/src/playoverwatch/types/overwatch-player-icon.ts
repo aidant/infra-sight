@@ -25,7 +25,7 @@ export interface OverwatchPlayerIcon {
   icon: string
   isNew: boolean
   isMarked: boolean
-  data:  {
+  data: {
     category: 'avatars'
     description: ''
     thumbnail: string
@@ -40,14 +40,16 @@ export interface OverwatchPlayerIcon {
       name: string
       version: number
       title: string
-    },
-    rarity: {
-      name: 'COMMON'
-      value: 0
-    } | {
-      name: 'RARE'
-      value: 1
     }
+    rarity:
+      | {
+          name: 'COMMON'
+          value: 0
+        }
+      | {
+          name: 'RARE'
+          value: 1
+        }
     url: string
     videoWebm: false
     videoMp4: false

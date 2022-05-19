@@ -8,12 +8,14 @@ export const parsePlatforms = ($: CheerioAPI): InfraSightPlatforms => {
     pc: null,
     psn: null,
     xbl: null,
-    nintendo_switch: null
+    nintendo_switch: null,
   }
 
   $('.masthead .button-group a').each((i, e) => {
     const element = $(e)
-    const platformName = element.text().replace('nintendo switch', 'nintendo_switch') as InfraSightPlatform
+    const platformName = element
+      .text()
+      .replace('nintendo switch', 'nintendo_switch') as InfraSightPlatform
     const platformLink = 'https://playoverwatch.com/en-us' + element.attr().href
     platforms[platformName] = platformLink
   })

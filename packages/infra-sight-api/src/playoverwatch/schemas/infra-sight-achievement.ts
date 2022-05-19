@@ -9,7 +9,7 @@ export const InfraSightAchievementSchema: Joi.ObjectSchema<InfraSightAchievement
   hero: Joi.when('category', {
     is: Joi.string().valid('Tank', 'Damage', 'Support'),
     then: OverwatchHeroSchema,
-    otherwise: Joi.any().valid(null)
+    otherwise: Joi.any().valid(null),
   }),
   name: Joi.string(),
   description: Joi.string(),

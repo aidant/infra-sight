@@ -11,5 +11,5 @@ export const OverwatchAccountSchema: Joi.ObjectSchema<OverwatchAccount> = Joi.ob
   playerLevel: Joi.number(),
   isPublic: Joi.boolean(),
   platform: OverwatchPlatformSchema,
-  portrait: OverwatchIDSchema
+  portrait: OverwatchIDSchema,
 }).options({ presence: 'required' })

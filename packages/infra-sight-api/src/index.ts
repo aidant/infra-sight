@@ -3,4 +3,3 @@ export { getOverwatchHeroes } from './playoverwatch/functions/get-overwatch-hero
 export { getOverwatchPlayerIcons } from './playoverwatch/functions/get-overwatch-player-icons.js'
 export { getOverwatchProfile } from './playoverwatch/functions/get-overwatch-profile.js'
 export { searchOverwatchAccounts } from './playoverwatch/functions/search-overwatch-accounts.js'
-

@@ -16,27 +16,28 @@
 
 ## Table of Contents
 
-  - [Quick Start](#quick-start)
-  - [SDK](#sdk)
-    - [`getOverwatchAccount`](#getoverwatchaccount)
-    - [`getOverwatchHeroes`](#getoverwatchheroes)
-    - [`getOverwatchPlayerIcons`](#getoverwatchplayericons)
-    - [`getOverwatchProfile`](#getoverwatchprofile)
-    - [`searchOverwatchAccounts`](#searchoverwatchaccounts)
-    - [`listOverwatchAccountHistory`](#listoverwatchaccounthistory)
-    - [`listOverwatchHeroesHistory`](#listoverwatchheroeshistory)
-    - [`listOverwatchPlayerIconsHistory`](#listoverwatchplayericonshistory)
-    - [`listOverwatchProfileHistory`](#listoverwatchprofilehistory)
-  - [API](#api)
-    - [`GET /v2/api/overwatch/accounts/{username}/history`](#get-v2apioverwatchaccountsusernamehistory)
-    - [`GET /v2/api/overwatch/accounts/{username}/latest`](#get-v2apioverwatchaccountsusernamelatest)
-    - [`GET /v2/api/overwatch/accounts/{username}/search`](#get-v2apioverwatchaccountsusernamesearch)
-    - [`GET /v2/api/overwatch/heroes/history`](#get-v2apioverwatchheroeshistory)
-    - [`GET /v2/api/overwatch/heroes/latest`](#get-v2apioverwatchheroeslatest)
-    - [`GET /v2/api/overwatch/player-icons/history`](#get-v2apioverwatchplayer-iconshistory)
-    - [`GET /v2/api/overwatch/player-icons/latest`](#get-v2apioverwatchplayer-iconslatest)
-    - [`GET /v2/api/overwatch/profiles/{username}/history`](#get-v2apioverwatchprofilesusernamehistory)
-    - [`GET /v2/api/overwatch/profiles/{username}/latest`](#get-v2apioverwatchprofilesusernamelatest)
+- [Quick Start](#quick-start)
+- [SDK](#sdk)
+  - [`getOverwatchAccount`](#getoverwatchaccount)
+  - [`getOverwatchHeroes`](#getoverwatchheroes)
+  - [`getOverwatchPlayerIcons`](#getoverwatchplayericons)
+  - [`getOverwatchProfile`](#getoverwatchprofile)
+  - [`searchOverwatchAccounts`](#searchoverwatchaccounts)
+  - [`listOverwatchAccountHistory`](#listoverwatchaccounthistory)
+  - [`listOverwatchHeroesHistory`](#listoverwatchheroeshistory)
+  - [`listOverwatchPlayerIconsHistory`](#listoverwatchplayericonshistory)
+  - [`listOverwatchProfileHistory`](#listoverwatchprofilehistory)
+- [API](#api)
+  - [`GET /v2/api/overwatch/accounts/{username}/history`](#get-v2apioverwatchaccountsusernamehistory)
+  - [`GET /v2/api/overwatch/accounts/{username}/latest`](#get-v2apioverwatchaccountsusernamelatest)
+  - [`GET /v2/api/overwatch/accounts/{username}/search`](#get-v2apioverwatchaccountsusernamesearch)
+  - [`GET /v2/api/overwatch/heroes/history`](#get-v2apioverwatchheroeshistory)
+  - [`GET /v2/api/overwatch/heroes/latest`](#get-v2apioverwatchheroeslatest)
+  - [`GET /v2/api/overwatch/player-icons/history`](#get-v2apioverwatchplayer-iconshistory)
+  - [`GET /v2/api/overwatch/player-icons/latest`](#get-v2apioverwatchplayer-iconslatest)
+  - [`GET /v2/api/overwatch/profiles/{username}/history`](#get-v2apioverwatchprofilesusernamehistory)
+  - [`GET /v2/api/overwatch/profiles/{username}/latest`](#get-v2apioverwatchprofilesusernamelatest)
+
 ---
 
 ## Quick Start
@@ -71,7 +72,6 @@ console.log(account)
 
 Returns `Promise<InfraSightAccount>`
 
-
 ### `getOverwatchHeroes`
 
 #### Example
@@ -85,7 +85,6 @@ console.log(heroes)
 ```
 
 Returns `Promise<OverwatchHeroList>`
-
 
 ### `getOverwatchPlayerIcons`
 
@@ -101,7 +100,6 @@ console.log(icons)
 
 Returns `Promise<InfraSightPlayerIconRecord>`
 
-
 ### `getOverwatchProfile`
 
 #### Example
@@ -115,7 +113,6 @@ console.log(profile)
 ```
 
 Returns `Promise<InfraSightProfile>`
-
 
 ### `searchOverwatchAccounts`
 
@@ -131,7 +128,6 @@ console.log(accounts)
 
 Returns `Promise<InfraSightAccountList>`
 
-
 ### `listOverwatchAccountHistory`
 
 #### Example
@@ -142,11 +138,9 @@ import * as InfraSight from '@infra-sight/sdk'
 for await (const item of InfraSight.listOverwatchAccountHistory()) {
   console.log(item)
 }
-
 ```
 
 Returns `AsyncGenerator<string, void, never>`
-
 
 ### `listOverwatchHeroesHistory`
 
@@ -158,11 +152,9 @@ import * as InfraSight from '@infra-sight/sdk'
 for await (const item of InfraSight.listOverwatchHeroesHistory()) {
   console.log(item)
 }
-
 ```
 
 Returns `AsyncGenerator<string, void, never>`
-
 
 ### `listOverwatchPlayerIconsHistory`
 
@@ -174,11 +166,9 @@ import * as InfraSight from '@infra-sight/sdk'
 for await (const item of InfraSight.listOverwatchPlayerIconsHistory()) {
   console.log(item)
 }
-
 ```
 
 Returns `AsyncGenerator<string, void, never>`
-
 
 ### `listOverwatchProfileHistory`
 
@@ -190,7 +180,6 @@ import * as InfraSight from '@infra-sight/sdk'
 for await (const item of InfraSight.listOverwatchProfileHistory()) {
   console.log(item)
 }
-
 ```
 
 Returns `AsyncGenerator<string, void, never>`
@@ -199,55 +188,46 @@ Returns `AsyncGenerator<string, void, never>`
 
 ## API
 
-
 ### `GET /v2/api/overwatch/accounts/{username}/history`
 
 #### Parameters
 
-  - `page_token`
-
+- `page_token`
 
 ### `GET /v2/api/overwatch/accounts/{username}/latest`
 
 #### Parameters
 
-  - `platform`
-  - `resolution_strategy`
-
+- `platform`
+- `resolution_strategy`
 
 ### `GET /v2/api/overwatch/accounts/{username}/search`
-
 
 ### `GET /v2/api/overwatch/heroes/history`
 
 #### Parameters
 
-  - `page_token`
-
+- `page_token`
 
 ### `GET /v2/api/overwatch/heroes/latest`
-
 
 ### `GET /v2/api/overwatch/player-icons/history`
 
 #### Parameters
 
-  - `page_token`
-
+- `page_token`
 
 ### `GET /v2/api/overwatch/player-icons/latest`
-
 
 ### `GET /v2/api/overwatch/profiles/{username}/history`
 
 #### Parameters
 
-  - `page_token`
-
+- `page_token`
 
 ### `GET /v2/api/overwatch/profiles/{username}/latest`
 
 #### Parameters
 
-  - `platform`
-  - `resolution_strategy`
+- `platform`
+- `resolution_strategy`

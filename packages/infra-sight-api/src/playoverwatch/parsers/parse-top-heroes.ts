@@ -9,7 +9,10 @@ import { parseNumber } from './parse-number.js'
 
 export const parseTopHeroes = ($: CheerioAPI): InfraSightTopHeroesRecord => {
   const gamemodes = parseGamemodes($)
-  const categories = parseDropdown($, '[data-js="career-category"] select[data-group-id="comparisons"] option')
+  const categories = parseDropdown(
+    $,
+    '[data-js="career-category"] select[data-group-id="comparisons"] option'
+  )
 
   const topHeroesRecord: InfraSightTopHeroesRecord = {}
   $('[data-js="career-category"] [data-js="progressBar"]').each((i, e) => {
@@ -19,13 +22,18 @@ export const parseTopHeroes = ($: CheerioAPI): InfraSightTopHeroesRecord => {
     const category = categories[categoryNumber]
     const categoryId = sanitize(category)
     const gamemodeId = element.parents('[data-js="career-category"]').attr()['data-mode']
-    
+
     const id = [gamemodeId, categoryId].join('__')
     const gamemode = gamemodes[gamemodeId]
     const hero = $('.ProgressBar-title', e).text()
     const value = parseNumber($('.ProgressBar-description', e).text())
 
-    topHeroesRecord[id] = topHeroesRecord[id] ?? { id, gamemode, category, top_heroes: [] }
+    topHeroesRecord[id] = topHeroesRecord[id] ?? {
+      id,
+      gamemode,
+      category,
+      top_heroes: [],
+    }
     topHeroesRecord[id].top_heroes.push({ hero, value })
   })
 

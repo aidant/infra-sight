@@ -9,7 +9,11 @@ import { parsePlatforms } from './parse-platforms.js'
 import { parseSkillRating } from './parse-skill-rating.js'
 import { parseTopHeroes } from './parse-top-heroes.js'
 
-export const parseProfile = ($: CheerioAPI, account: InfraSightAccount, heroes:  OverwatchHeroList): InfraSightProfile => {
+export const parseProfile = (
+  $: CheerioAPI,
+  account: InfraSightAccount,
+  heroes: OverwatchHeroList
+): InfraSightProfile => {
   const profile: InfraSightProfile = {
     account,
     achievements: parseAchievements($, heroes),

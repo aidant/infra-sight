@@ -6,5 +6,5 @@ export const InfraSightPlayerIconSchema: Joi.ObjectSchema<InfraSightPlayerIcon> 
   url: Joi.string().uri(),
   name: Joi.string(),
   hero: OverwatchHeroSchema.allow(null),
-  event: Joi.string()
+  event: Joi.string(),
 }).options({ presence: 'required' })

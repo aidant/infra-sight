@@ -10,7 +10,7 @@ export const parseNumber = (value: string): number => {
     const [seconds = 0, minutes = 0, hours = 0] = value.split(':').reverse().map(Number)
     return seconds + minutes * 60 + hours * 60 * 60
   }
-  
+
   /*
     Parse a percentage into a zero to one fraction.
   */

@@ -4,11 +4,19 @@ import { InfraSightEndorsementsSchema } from '../schemas/infra-sight-endorsement
 import { validate } from '../validate.js'
 
 export const parseEndorsements = ($: CheerioAPI): InfraSightEndorsements => {
-  const level = $('.masthead-player-progression:not(.masthead-player-progression--mobile) .u-center').text()
+  const level = $(
+    '.masthead-player-progression:not(.masthead-player-progression--mobile) .u-center'
+  ).text()
 
-  const shotcaller = $('.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--shotcaller').attr()['data-value']
-  const goodTeammate = $('.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--teammate').attr()['data-value']
-  const sportsmanship = $('.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--sportsmanship').attr()['data-value']
+  const shotcaller = $(
+    '.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--shotcaller'
+  ).attr()['data-value']
+  const goodTeammate = $(
+    '.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--teammate'
+  ).attr()['data-value']
+  const sportsmanship = $(
+    '.masthead-player-progression:not(.masthead-player-progression--mobile) .endorsement-level svg.EndorsementIcon-border--sportsmanship'
+  ).attr()['data-value']
 
   const endorsements: InfraSightEndorsements = {
     level: parseInt(level),

@@ -12,7 +12,9 @@ export interface GetOverwatchAccountOptions {
   resolution_strategy?: InfraSightResolutionStrategies
 }
 
-export function validateGetOverwatchAccountOptions (options: GetOverwatchAccountOptions): asserts options is GetOverwatchAccountOptions {
+export function validateGetOverwatchAccountOptions(
+  options: GetOverwatchAccountOptions
+): asserts options is GetOverwatchAccountOptions {
   const errors: string[] = []
 
   const platforms = Object.values(InfraSightPlatform)
@@ -26,18 +28,39 @@ export function validateGetOverwatchAccountOptions (options: GetOverwatchAccount
     errors.push('platform')
   }
 
-  if (options?.resolution_strategy?.length && options.resolution_strategy.some(strategy => strategy && !resolution_strategy.includes(strategy))) {
-    errors.push('resolution_strategy') 
+  if (
+    options?.resolution_strategy?.length &&
+    options.resolution_strategy.some(
+      (strategy) => strategy && !resolution_strategy.includes(strategy)
+    )
+  ) {
+    errors.push('resolution_strategy')
   }
 
   if (errors.length) {
-    throw new InfraSightError(ErrorCode.InfraSightInvalidOptions, { options: errors })
+    throw new InfraSightError(ErrorCode.InfraSightInvalidOptions, {
+      options: errors,
+    })
   }
 }
 
-export type GetOverwatchAccount = (this: InfraSightAPI, options: GetOverwatchAccountOptions) => Promise<InfraSightAccount>
+export type GetOverwatchAccount = (
+  this: InfraSightAPI,
+  options: GetOverwatchAccountOptions
+) => Promise<InfraSightAccount>
 
-export const getOverwatchAccount: GetOverwatchAccount = async ({ username, platform, resolution_strategy }) => {
-  validateGetOverwatchAccountOptions({ username, platform, resolution_strategy })
-  return get(`./v2/api/overwatch/accounts/${encodeURIComponent(username)}/latest`, { platform, resolution_strategy })
+export const getOverwatchAccount: GetOverwatchAccount = async ({
+  username,
+  platform,
+  resolution_strategy,
+}) => {
+  validateGetOverwatchAccountOptions({
+    username,
+    platform,
+    resolution_strategy,
+  })
+  return get(`./v2/api/overwatch/accounts/${encodeURIComponent(username)}/latest`, {
+    platform,
+    resolution_strategy,
+  })
 }

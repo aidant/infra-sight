@@ -4,6 +4,6 @@ export const listOverwatchProfileHistory = createListHandler((event) => {
   const username = event.pathParameters?.username as string
 
   return {
-    path: `/overwatch/profiles/${Buffer.from(username, 'utf8').toString('hex')}/`
+    path: `/overwatch/profiles/${Buffer.from(username, 'utf8').toString('hex')}/`,
   }
 })

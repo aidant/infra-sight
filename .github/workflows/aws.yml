@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           persist-credentials: false
-      
+
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -35,7 +35,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set Serverless Stage 
+      - name: Set Serverless Stage
         run: echo "SERVERLESS_STAGE=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Serverless Deploy
