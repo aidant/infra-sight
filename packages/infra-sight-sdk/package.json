@@ -24,8 +24,5 @@
   "sideEffects": false,
   "type": "module",
   "types": "lib/index.d.ts",
-  "dependencies": {},
-  "devDependencies": {
-    "typescript": "^4.3.5"
-  }
+  "dependencies": {}
 }

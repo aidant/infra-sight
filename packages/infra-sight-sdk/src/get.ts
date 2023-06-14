@@ -1,7 +1,7 @@
 import { INFRA_SIGHT_API_URL } from './environment.js'
-import { createErrorFromObject } from './errors.js'
-import { InfraSightPaginationOptions } from './playoverwatch/types/infra-sight-pagination-options.js'
-import { InfraSightPaginationResponse } from './playoverwatch/types/infra-sight-pagination-response.js'
+import { InfraSightError } from './errors.js'
+import type { InfraSightPaginationOptions } from './overwatch/types/infra-sight-pagination-options.js'
+import type { InfraSightPaginationResponse } from './overwatch/types/infra-sight-pagination-response.js'
 
 type Params = Record<string, undefined | string | (undefined | string)[]>
 
@@ -16,7 +16,7 @@ export const get = async <T>(path: string, params: Params = {}): Promise<T> => {
   }
 
   const response = await fetch(url.href)
-  if (!response.ok) throw createErrorFromObject(await response.json())
+  if (!response.ok) throw InfraSightError.deserialize(await response.json())
   return response.json()
 }
 

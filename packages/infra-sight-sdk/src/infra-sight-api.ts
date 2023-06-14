@@ -1,8 +1,8 @@
-import { GetOverwatchAccount } from './playoverwatch/functions/get-overwatch-account.js'
-import { GetOverwatchHeroes } from './playoverwatch/functions/get-overwatch-heroes.js'
-import { GetOverwatchPlayerIcons } from './playoverwatch/functions/get-overwatch-player-icons.js'
-import { GetOverwatchProfile } from './playoverwatch/functions/get-overwatch-profile.js'
-import { SearchOverwatchAccounts } from './playoverwatch/functions/search-overwatch-accounts.js'
+import type { GetOverwatchAccount } from './overwatch/functions/get-overwatch-account.js'
+import type { GetOverwatchHeroes } from './overwatch/functions/get-overwatch-heroes.js'
+import type { GetOverwatchPlayerIcons } from './overwatch/functions/get-overwatch-player-icons.js'
+import type { GetOverwatchProfile } from './overwatch/functions/get-overwatch-profile.js'
+import type { SearchOverwatchAccounts } from './overwatch/functions/search-overwatch-accounts.js'
 
 export interface InfraSightAPI {
   searchOverwatchAccounts: SearchOverwatchAccounts

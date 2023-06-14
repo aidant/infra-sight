@@ -49,7 +49,7 @@ npm install @infra-sight/sdk
 ```ts
 import * as InfraSight from '@infra-sight/sdk'
 
-const profile = await InfraSight.getOverwatchProfile('Tracer#3939')
+const profile = await InfraSight.getOverwatchProfile('Tracer')
 
 console.log(profile)
 ```

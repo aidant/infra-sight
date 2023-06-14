@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install Dependencies
         run: npm ci
@@ -28,8 +28,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Test
+        run: npm --workspace @infra-sight/aws run test
+
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -38,11 +41,24 @@ jobs:
       - name: Set Serverless Stage
         run: echo "SERVERLESS_STAGE=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
+      - name: Get Serverless Current Deployment Version
+        run: echo "SERVERLESS_DEPLOYMENT_VERSION=$(npx serverless deploy list --stage $SERVERLESS_STAGE | grep Timestamp | tail -1 | awk '{print $3}')"
+
       - name: Serverless Deploy
-        run: ../../node_modules/.bin/serverless deploy --stage $SERVERLESS_STAGE
+        run: npx serverless deploy --stage $SERVERLESS_STAGE
         working-directory: ./packages/infra-sight-aws
 
+      - name: Test Deployment
+        id: test-deployment
+        run: npm --workspace @infra-sight/aws run test -- --mode test:live
+        continue-on-error: true
+
+      - name: Rollback
+        if: steps.test-deployment.outcome == 'failure'
+        run: npx serverless rollback --stage $SERVERLESS_STAGE --timestamp $SERVERLESS_DEPLOYMENT_VERSION
+
       - name: Deploy API Metadata
+        if: steps.test-deployment.outcome == 'success'
         run: |
           echo \{\"name\":\"infra-sight\",\"version\":2,\"commit\":\"$GITHUB_SHA\"\} | aws s3 cp --content-type "application/json; charset=utf8" --cache-control "public, max-age=31536000" - s3://$(aws cloudformation describe-stack-resources --stack-name infra-sight-$SERVERLESS_STAGE | jq -r '.StackResources | map(select(.LogicalResourceId == "Bucket")) | .[0].PhysicalResourceId')/metadata.json
           aws cloudfront create-invalidation --distribution-id $(aws cloudformation describe-stack-resources --stack-name infra-sight-$SERVERLESS_STAGE | jq -r '.StackResources | map(select(.LogicalResourceId == "CloudFrontDistribution")) | .[0].PhysicalResourceId') --paths /

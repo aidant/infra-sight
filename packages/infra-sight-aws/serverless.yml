@@ -1,5 +1,7 @@
-frameworkVersion: '2'
+frameworkVersion: '3'
 variablesResolutionMode: 20210326
+
+useDotenv: true
 
 service: infra-sight
 
@@ -9,11 +11,26 @@ plugins:
 
 custom:
   esbuild:
-    target: node12
+    target: node18
     sourcemap: true
+    platform: neutral
+    outputFileExtension: '.mjs'
+    external:
+      - '@aws-sdk/client-s3'
+      - cheerio
+      - node:crypto
+      - fast-json-stable-stringify
+      - joi
+    exclude:
+      - '@aws-sdk/client-s3'
+    mainFields:
+      - module
+      - main
 
   name: ${self:service}-${opt:stage, self:provider.stage}
   domain: ${self:custom.stage.${opt:stage, self:provider.stage}.domain}
+  bucket: !Ref Bucket
+  url: https://${self:custom.domain}/
   stage:
     production:
       domain: ${env:DOMAIN_NAME_PRODUCTION, 'infra-sight.api.aidan.pro'}
@@ -21,10 +38,12 @@ custom:
       domain: ${env:DOMAIN_NAME_STAGING, 'infra-sight.api.staging.aidan.pro'}
     development:
       domain: ${env:DOMAIN_NAME_DEVELOPMENT, 'infra-sight.api.development.aidan.pro'}
+    test:
+      domain: ${env:DOMAIN_NAME_TEST, 'localhost:3000'}
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   stage: development
   region: us-east-1
   stackName: ${self:custom.name}
@@ -32,12 +51,10 @@ provider:
   timeout: 28
   lambdaHashingVersion: 20201221
   environment:
-    AWS_BUCKET: !Ref Bucket
-    INFRA_SIGHT_API_URL: !Join
-      - ''
-      - - https://
-        - ${self:custom.domain}
-        - /
+    NODE_OPTIONS: --enable-source-maps
+    AWS_BUCKET: ${env:AWS_BUCKET, self:custom.bucket}
+    INFRA_SIGHT_API_URL: ${env:INFRA_SIGHT_API_URL, self:custom.url}
+    S3_CONFIG: ${env:S3_CONFIG}
   iam:
     role:
       statements:
@@ -76,67 +93,74 @@ package:
 
 functions:
   SearchOverwatchAccounts:
-    handler: src/search-overwatch-accounts.searchOverwatchAccounts
+    handler: src/functions/search-overwatch-accounts.searchOverwatchAccounts
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/accounts/{username}/search
 
   GetOverwatchAccount:
-    handler: src/get-overwatch-account.getOverwatchAccount
+    handler: src/functions/get-overwatch-account.getOverwatchAccount
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/accounts/{username}/latest
 
   GetOverwatchHeroes:
-    handler: src/get-overwatch-heroes.getOverwatchHeroes
+    handler: src/functions/get-overwatch-heroes.getOverwatchHeroes
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/heroes/latest
 
   GetOverwatchPlayerIcons:
-    handler: src/get-overwatch-player-icons.getOverwatchPlayerIcons
+    handler: src/functions/get-overwatch-player-icons.getOverwatchPlayerIcons
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/player-icons/latest
 
   GetOverwatchProfile:
-    handler: src/get-overwatch-profile.getOverwatchProfile
+    handler: src/functions/get-overwatch-profile.getOverwatchProfile
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/profiles/{username}/latest
 
   ListOverwatchAccountHistory:
-    handler: src/list-overwatch-account-history.listOverwatchAccountHistory
+    handler: src/functions/list-overwatch-account-history.listOverwatchAccountHistory
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/accounts/{username}/history
 
   ListOverwatchHeroesHistory:
-    handler: src/list-overwatch-heroes-history.listOverwatchHeroesHistory
+    handler: src/functions/list-overwatch-heroes-history.listOverwatchHeroesHistory
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/heroes/history
 
   ListOverwatchPlayerIconsHistory:
-    handler: src/list-overwatch-player-icons-history.listOverwatchPlayerIconsHistory
+    handler: src/functions/list-overwatch-player-icons-history.listOverwatchPlayerIconsHistory
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/player-icons/history
 
   ListOverwatchProfileHistory:
-    handler: src/list-overwatch-profile-history.listOverwatchProfileHistory
+    handler: src/functions/list-overwatch-profile-history.listOverwatchProfileHistory
     events:
       - httpApi:
           method: GET
           path: /v2/api/overwatch/profiles/{username}/history
+
+  CDN:
+    handler: src/functions/cdn.cdn
+    events:
+      - httpApi:
+          method: GET
+          path: /{key+}
 
 resources:
   Resources:

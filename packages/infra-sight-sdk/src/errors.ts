@@ -1,99 +1,112 @@
-import { GetOverwatchAccountOptions } from './playoverwatch/functions/get-overwatch-account.js'
-import { InfraSightAccountList } from './playoverwatch/types/infra-sight-account-list.js'
-import { InfraSightAccount } from './playoverwatch/types/infra-sight-account.js'
+import type { InfraSightAccountList } from './overwatch/types/infra-sight-account-list.js'
+import type { InfraSightAccount } from './overwatch/types/infra-sight-account.js'
+import type { InfraSightResolutionStrategies } from './overwatch/types/infra-sight-resolution-strategies.js'
 
-export enum ErrorType {
-  Application = 'Application',
-  User = 'User',
-}
+export type InfraSightErrorContextSource = 'Consumer' | 'InfraSight' | 'Overwatch'
 
-export enum ErrorCode {
-  PlayOverwatchInvalidGateway = 'PlayOverwatchInvalidGateway',
-  PlayOverwatchUnparsableContent = 'PlayOverwatchUnparsableContent',
-  PlayOverwatchPrivateProfile = 'PlayOverwatchPrivateProfile',
-  PlayOverwatchUnknownAccount = 'PlayOverwatchUnknownAccount',
-  PlayOverwatchUnresolvableAccount = 'PlayOverwatchUnresolvableAccount',
-  InfraSightInvalidOptions = 'InfraSightInvalidOptions',
-}
+export type InfraSightErrorContextCode<Source extends InfraSightErrorContextSource> = {
+  Consumer:
+    | 'ConsumerInvalidOptions'
+    | 'ConsumerPrivateProfile'
+    | 'ConsumerUnknownAccount'
+    | 'ConsumerUnresolvableAccount'
+  InfraSight: 'InfraSightUnknown'
+  Overwatch: 'OverwatchInvalidGateway' | 'OverwatchUnparsableContent'
+}[Source]
 
-interface ErrorDetail extends Record<ErrorCode, object> {
-  PlayOverwatchUnresolvableAccount: {
-    options: GetOverwatchAccountOptions
-    accounts: InfraSightAccountList
-  }
-  PlayOverwatchPrivateProfile: {
-    account: InfraSightAccount
-  }
-  InfraSightInvalidOptions: {
+export type InfraSightErrorContextDetail<
+  Code extends InfraSightErrorContextCode<InfraSightErrorContextSource>
+> = {
+  ConsumerInvalidOptions: {
     options: string[]
   }
-}
-
-const Errors: Record<ErrorCode, { type: ErrorType; message: string }> = {
-  PlayOverwatchInvalidGateway: {
-    type: ErrorType.Application,
-    message: 'Unable to load data from playoverwatch.com at the moment, please try again later.',
-  },
-  PlayOverwatchUnparsableContent: {
-    type: ErrorType.Application,
-    message: 'Unable to load data from playoverwatch.com at the moment, please try again later.',
-  },
-  PlayOverwatchPrivateProfile: {
-    type: ErrorType.User,
-    message: 'Sorry, the requested profile is private.',
-  },
-  PlayOverwatchUnknownAccount: {
-    type: ErrorType.User,
-    message:
-      'We could not find the account you requested, please ensure you have spelt everything correctly.',
-  },
-  PlayOverwatchUnresolvableAccount: {
-    type: ErrorType.User,
-    message:
-      'We found several accounts that match your request, try including platform or specifying the full account name.',
-  },
-  InfraSightInvalidOptions: {
-    type: ErrorType.User,
-    message: 'Invalid request options.',
-  },
-}
-
-export class InfraSightError<T extends ErrorCode> extends Error {
-  type: typeof Errors[T]['type']
-
-  constructor(public code: T, public detail: ErrorDetail[T]) {
-    super(Errors[code].message)
-    this.type = Errors[code].type
+  ConsumerPrivateProfile: {
+    username: string
+    resolution_strategy: InfraSightResolutionStrategies
+    account: InfraSightAccount
   }
-}
+  ConsumerUnknownAccount: {
+    username: string
+  }
+  ConsumerUnresolvableAccount: {
+    username: string
+    resolution_strategy: InfraSightResolutionStrategies
+    accounts: InfraSightAccountList
+  }
+  InfraSightUnknown: undefined
+  OverwatchInvalidGateway: {
+    url: string
+    status: number
+    body: string | null
+  }
+  OverwatchUnparsableContent: undefined
+}[Code]
 
-interface InfraSightErrorObject<T extends ErrorCode = ErrorCode> {
-  $$InfraSightError: true
-  code: T
-  type: typeof Errors[T]['type']
+export interface InfraSightErrorContext<
+  Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
+> {
+  source: Code extends `Consumer${string}`
+    ? 'Consumer'
+    : Code extends `InfraSight${string}`
+    ? 'InfraSight'
+    : Code extends `Overwatch${string}`
+    ? 'Overwatch'
+    : never
+  code: Code
   message: string
-  detail: ErrorDetail[T]
+  detail: InfraSightErrorContextDetail<Code>
 }
 
-export const createErrorFromObject = (error: object): Error => {
-  if ((error as any)?.$$InfraSightError) {
-    return new InfraSightError(
-      (error as InfraSightErrorObject).code,
-      (error as InfraSightErrorObject).detail
-    )
-  } else {
-    return Object.assign(new Error('Unable to identify error.'), error)
+export interface InfraSightErrorObject<
+  Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
+> extends InfraSightErrorContext<Code> {
+  $$InfraSightError: true
+}
+
+export class InfraSightError<
+    Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
+  >
+  extends Error
+  implements InfraSightErrorContext<Code>
+{
+  static serialize<
+    Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
+  >(error: InfraSightError<Code>): InfraSightErrorObject {
+    return {
+      $$InfraSightError: true,
+      source: error.source,
+      code: error.code,
+      message: error.message,
+      detail: error.detail,
+    }
   }
-}
 
-export const createObjectFromError = <T extends ErrorCode>(
-  error: InfraSightError<T>
-): InfraSightErrorObject<T> => {
-  return {
-    $$InfraSightError: true,
-    code: error.code,
-    type: error.type,
-    message: error.message,
-    detail: error.detail,
+  static deserialize<
+    Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
+  >(error: unknown): InfraSightError<Code | 'InfraSightUnknown'> {
+    if (
+      error &&
+      typeof error === 'object' &&
+      '$$InfraSightError' in error &&
+      error['$$InfraSightError'] === true
+    ) {
+      return new InfraSightError(
+        (error as InfraSightErrorObject<Code>).source,
+        (error as InfraSightErrorObject<Code>).code,
+        (error as InfraSightErrorObject<Code>).message,
+        (error as InfraSightErrorObject<Code>).detail
+      )
+    } else {
+      return new InfraSightError('InfraSight', 'InfraSightUnknown', 'Unknown error', undefined)
+    }
+  }
+
+  constructor(
+    public readonly source: InfraSightErrorContext<Code>['source'],
+    public readonly code: InfraSightErrorContext<Code>['code'],
+    public override readonly message: string,
+    public readonly detail: InfraSightErrorContext<Code>['detail']
+  ) {
+    super(message)
   }
 }

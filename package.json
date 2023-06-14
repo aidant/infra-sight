@@ -1,8 +1,16 @@
 {
+  "name": "infra-sight",
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "npm --workspaces run build"
+    "build": "npm --workspaces --if-present run build",
+    "test": "npm --workspaces --if-present run test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.1.3",
+    "vitest": "^0.32.0"
   }
 }

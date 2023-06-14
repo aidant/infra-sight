@@ -1,23 +1,18 @@
-import { ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3'
 import {
-  createObjectFromError,
-  ErrorType,
-  InfraSightError,
-  InfraSightPaginationResponse,
   INFRA_SIGHT_API_URL,
+  InfraSightError,
+  type InfraSightPaginationResponse,
 } from '@infra-sight/sdk'
-import {
+import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyHandlerV2,
   APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda'
-import crypto from 'crypto'
 import stringify from 'fast-json-stable-stringify'
-import 'isomorphic-fetch'
-import 'source-map-support/register'
+import crypto from 'node:crypto'
+import { AWS_BUCKET, s3 } from './s3.js'
 import { stamptime } from './stamptime.js'
-
-const AWS_BUCKET = process.env.AWS_BUCKET
 
 const headers = {
   'access-control-allow-origin': '*',
@@ -25,22 +20,18 @@ const headers = {
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
 }
 
-const s3 = new S3Client({})
-
-const hashMd5 = (json: string): Buffer => {
-  return crypto.createHash('md5').update(json).digest()
+const createHashSHA256 = (json: string): Buffer => {
+  return crypto.createHash('sha256').update(json, 'utf-8').digest()
 }
 
 const handleError = (error: unknown): APIGatewayProxyStructuredResultV2 => {
-  console.error(error)
-
   let statusCode = 500
   let body = stringify({ message: 'Internal Server Error' })
 
   if (error instanceof InfraSightError) {
-    body = stringify(createObjectFromError(error))
+    body = stringify(InfraSightError.serialize(error))
 
-    if (error.type === ErrorType.User) {
+    if (error.source === 'Consumer') {
       statusCode = 422
     }
   }
@@ -60,7 +51,7 @@ const handleError = (error: unknown): APIGatewayProxyStructuredResultV2 => {
 interface ScrapeResponse {
   path: string
   payload: object
-  cache?: number
+  cache?: number | undefined
 }
 
 export const createScraperHandler =
@@ -70,11 +61,11 @@ export const createScraperHandler =
       const { path, payload, cache = 86400 } = await handler(event)
 
       const json = stringify(payload)
-      const md5 = hashMd5(json)
-      const md5hex = md5.toString('hex')
-      const md5base64 = md5.toString('base64')
+      const hash = createHashSHA256(json)
+      const hashHex = hash.toString('hex')
+      const hashBase64 = hash.toString('base64')
       const prefix = 'v2/cdn' + path
-      const key = prefix + stamptime() + '-' + md5hex
+      const key = prefix + stamptime() + '-' + hashHex
       let location: string
 
       const latest = await s3
@@ -86,9 +77,9 @@ export const createScraperHandler =
             MaxKeys: 1,
           })
         )
-        .then((response) => response.Contents?.[0].Key)
+        .then((response) => response.Contents?.[0]?.Key)
 
-      if (!latest || latest.substring(prefix.length).split('-')[1] !== md5hex) {
+      if (!latest || latest.substring(prefix.length).split('-')[1] !== hashHex) {
         await s3.send(
           new PutObjectCommand({
             Bucket: AWS_BUCKET,
@@ -96,7 +87,8 @@ export const createScraperHandler =
             Body: json,
 
             CacheControl: 'public, max-age=31536000',
-            ContentMD5: md5base64,
+            ChecksumAlgorithm: 'SHA256',
+            ChecksumSHA256: hashBase64,
             ContentType: 'application/json; charset=utf8',
           })
         )
@@ -135,7 +127,7 @@ export const createListHandler =
           Bucket: AWS_BUCKET,
           Delimiter: '/',
           Prefix: 'v2/cdn' + path,
-          ContinuationToken: event.queryStringParameters?.page_token,
+          ContinuationToken: event.queryStringParameters?.['page_token'] as string,
         })
       )
 

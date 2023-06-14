@@ -3,8 +3,7 @@ const getEnvironmentVariable = (name: string): string | null => {
     return process.env[name] ?? null
   } catch {
     try {
-      // @ts-ignore
-      return import.meta.env[name] ?? null
+      return (import.meta as unknown as { env: Partial<Record<string, string>> }).env[name] ?? null
     } catch {
       return null
     }

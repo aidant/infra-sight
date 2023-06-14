@@ -1,8 +1,23 @@
 {
+  "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "javascript.preferences.importModuleSpecifierEnding": "js",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
     "source.addMissingImports": true
+  },
+  "files.exclude": {
+    ".vscode": true,
+    "node_modules": true,
+    "packages/*/node_modules": true,
+    "packages/*/lib": true,
+    "packages/*/README.md": true,
+    "packages/infra-sight-aws/.esbuild": true,
+    "packages/infra-sight-aws/.serverless": true,
+  },
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.test.ts",
+    "package.json": "package-lock.json, .gitignore, .prettierrc, .npmignore, tsconfig.json, tsconfig.tsbuildinfo, vitest.workspace.ts",
+    "vitest.config.ts": "*.vitest.setup.ts, .env.test, s3.js"
   }
 }
