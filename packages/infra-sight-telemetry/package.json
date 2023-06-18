@@ -1,11 +1,11 @@
 {
-  "name": "@infra-sight/api",
+  "name": "@infra-sight/telemetry",
   "version": "2.0.0-alpha.0",
   "description": "Infra-Sight is an elegant UX focused API for Overwatch.",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "repository": {
-    "directory": "packages/infra-sight-api",
+    "directory": "packages/infra-sight-telemetry",
     "type": "git",
     "url": "https://github.com/aidant/infra-sight.git"
   },
@@ -19,17 +19,13 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc --build",
-    "pretest": "npm run build",
-    "test": "vitest run"
+    "build": "tsc --build"
   },
   "sideEffects": false,
   "type": "module",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@infra-sight/sdk": "*",
-    "@infra-sight/telemetry": "*",
-    "cheerio": "^1.0.0-rc.12",
-    "joi": "^17.9.2"
+    "@opentelemetry/api": "^1.4.1",
+    "@opentelemetry/semantic-conventions": "^1.14.0"
   }
 }

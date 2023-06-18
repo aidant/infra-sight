@@ -45,6 +45,7 @@ export type InfraSightErrorContextDetail<
 export interface InfraSightErrorContext<
   Code extends InfraSightErrorContextCode<InfraSightErrorContextSource> = InfraSightErrorContextCode<InfraSightErrorContextSource>
 > {
+  id: string | null
   source: Code extends `Consumer${string}`
     ? 'Consumer'
     : Code extends `InfraSight${string}`
@@ -74,6 +75,7 @@ export class InfraSightError<
   >(error: InfraSightError<Code>): InfraSightErrorObject {
     return {
       $$InfraSightError: true,
+      id: error.id,
       source: error.source,
       code: error.code,
       message: error.message,
@@ -94,7 +96,8 @@ export class InfraSightError<
         (error as InfraSightErrorObject<Code>).source,
         (error as InfraSightErrorObject<Code>).code,
         (error as InfraSightErrorObject<Code>).message,
-        (error as InfraSightErrorObject<Code>).detail
+        (error as InfraSightErrorObject<Code>).detail,
+        (error as InfraSightErrorObject<Code>).id
       )
     } else {
       return new InfraSightError('InfraSight', 'InfraSightUnknown', 'Unknown error', undefined)
@@ -105,7 +108,8 @@ export class InfraSightError<
     public readonly source: InfraSightErrorContext<Code>['source'],
     public readonly code: InfraSightErrorContext<Code>['code'],
     public override readonly message: string,
-    public readonly detail: InfraSightErrorContext<Code>['detail']
+    public readonly detail: InfraSightErrorContext<Code>['detail'],
+    public readonly id: InfraSightErrorContext<Code>['id'] = null
   ) {
     super(message)
   }

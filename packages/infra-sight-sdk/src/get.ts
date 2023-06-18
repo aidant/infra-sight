@@ -1,5 +1,5 @@
 import { INFRA_SIGHT_API_URL } from './environment.js'
-import { InfraSightError } from './errors.js'
+import { InfraSightError } from './error.js'
 import type { InfraSightPaginationOptions } from './overwatch/types/infra-sight-pagination-options.js'
 import type { InfraSightPaginationResponse } from './overwatch/types/infra-sight-pagination-response.js'
 

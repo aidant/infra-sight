@@ -6,7 +6,7 @@ export {
   type InfraSightErrorContextDetail,
   type InfraSightErrorContextSource,
   type InfraSightErrorObject,
-} from './errors.js'
+} from './error.js'
 export type { InfraSightAPI } from './infra-sight-api.js'
 export {
   getOverwatchAccount,

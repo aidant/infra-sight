@@ -4,7 +4,7 @@
     "outDir": "./lib",
     "rootDir": "./src"
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "src/telemetry.ts"],
   "exclude": ["./src/**/*.test.ts"],
-  "references": [{ "path": "../infra-sight-sdk" }]
+  "references": [{ "path": "../infra-sight-sdk" }, { "path": "../infra-sight-telemetry" }]
 }

@@ -1,4 +1,4 @@
-import { InfraSightError } from '@infra-sight/sdk'
+import { InfraSightErrorWithTracing } from '../../error.js'
 
 export const parseNumber = (value: string): number => {
   value = value.replace(/,/g, '')
@@ -25,7 +25,7 @@ export const parseNumber = (value: string): number => {
     return Number(value)
   }
 
-  throw new InfraSightError<'OverwatchUnparsableContent'>(
+  throw new InfraSightErrorWithTracing<'OverwatchUnparsableContent'>(
     'Overwatch',
     'OverwatchUnparsableContent',
     `InfraSight was unable to parse the content from overwatch.blizzard.com while attempting to parse a number; please try again later or open an issue on InfraSight's GitHub repository if the problem persists.`,

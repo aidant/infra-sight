@@ -42,7 +42,7 @@ jobs:
         run: echo "SERVERLESS_STAGE=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Get Serverless Current Deployment Version
-        run: echo "SERVERLESS_DEPLOYMENT_VERSION=$(npx serverless deploy list --stage $SERVERLESS_STAGE | grep Timestamp | tail -1 | awk '{print $3}')"
+        run: echo "SERVERLESS_DEPLOYMENT_VERSION=$(npx serverless deploy list --stage $SERVERLESS_STAGE | grep Timestamp | tail -1 | awk '{print $3}')" >> $GITHUB_ENV
 
       - name: Serverless Deploy
         run: npx serverless deploy --stage $SERVERLESS_STAGE

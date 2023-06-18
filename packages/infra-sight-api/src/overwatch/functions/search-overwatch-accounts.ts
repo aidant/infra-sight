@@ -4,14 +4,25 @@ import {
   type OverwatchAccountList,
   type SearchOverwatchAccounts,
 } from '@infra-sight/sdk'
-import { getCareerProfileUrl, isNintendoSwitch, isPC, overwatch } from '../overwatch.js'
+import { InfraSightErrorWithTracing } from '../../error.js'
+import { trace } from '../../telemetry.js'
+import { getCareerProfileUrl, getOverwatchJSON, isNintendoSwitch, isPC } from '../overwatch.js'
 import { InfraSightAccountListSchema } from '../schemas/infra-sight-account-list.js'
 import { OverwatchAccountListSchema } from '../schemas/overwatch-account-list.js'
 import { validate } from '../validate.js'
 
-export const searchOverwatchAccounts: SearchOverwatchAccounts =
+export const searchOverwatchAccounts = trace<SearchOverwatchAccounts>(
+  {
+    name: 'InfraSight.function.searchOverwatchAccounts',
+    with: (options) => ({
+      'infra_sight.options.username': options.username,
+    }),
+  },
   async function searchOverwatchAccounts({ username }) {
-    validateSearchOverwatchAccountsOptions({ username })
+    validateSearchOverwatchAccountsOptions.call(
+      { InfraSightError: InfraSightErrorWithTracing },
+      { username }
+    )
 
     /*
       The search account by name endpoint does not resolve a full nintendo switch
@@ -25,7 +36,7 @@ export const searchOverwatchAccounts: SearchOverwatchAccounts =
 
     const [playerIcons, rawOverwatchSearchAccounts] = await Promise.all([
       this.getOverwatchPlayerIcons(),
-      overwatch.json('./search/account-by-name/' + encodeURIComponent(name)),
+      getOverwatchJSON('./search/account-by-name/' + encodeURIComponent(name)),
     ])
 
     const accounts: InfraSightAccountList = []
@@ -50,3 +61,4 @@ export const searchOverwatchAccounts: SearchOverwatchAccounts =
 
     return validate<InfraSightAccountList>(InfraSightAccountListSchema, accounts)
   }
+)

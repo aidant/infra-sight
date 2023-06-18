@@ -1,4 +1,4 @@
-import { InfraSightError } from '../../errors.js'
+import { InfraSightError } from '../../error.js'
 import { get } from '../../get.js'
 import type { InfraSightAPI } from '../../infra-sight-api.js'
 import type { InfraSightAccount } from '../types/infra-sight-account.js'
@@ -11,6 +11,7 @@ export interface GetOverwatchAccountOptions {
 }
 
 export function validateGetOverwatchAccountOptions(
+  this: { InfraSightError: typeof InfraSightError },
   options: GetOverwatchAccountOptions
 ): asserts options is GetOverwatchAccountOptions {
   const errors: { option: string; message: string }[] = []
@@ -31,7 +32,7 @@ export function validateGetOverwatchAccountOptions(
   }
 
   if (errors.length) {
-    throw new InfraSightError<'ConsumerInvalidOptions'>(
+    throw new this.InfraSightError<'ConsumerInvalidOptions'>(
       'Consumer',
       'ConsumerInvalidOptions',
       `InfraSight is unable to get an account ${errors
@@ -55,10 +56,13 @@ export const getOverwatchAccount: GetOverwatchAccount = async ({
   username,
   resolution_strategy,
 }) => {
-  validateGetOverwatchAccountOptions({
-    username,
-    resolution_strategy,
-  })
+  validateGetOverwatchAccountOptions.call(
+    { InfraSightError },
+    {
+      username,
+      resolution_strategy,
+    }
+  )
   return get(`./v2/api/overwatch/accounts/${encodeURIComponent(username)}/latest`, {
     resolution_strategy,
   })
