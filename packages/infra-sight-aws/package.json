@@ -23,7 +23,7 @@
     "test": "vitest run"
   },
   "sideEffects": [
-    "./src/instrument.ts"
+    "./src/instrumentation.ts"
   ],
   "type": "commonjs",
   "dependencies": {
