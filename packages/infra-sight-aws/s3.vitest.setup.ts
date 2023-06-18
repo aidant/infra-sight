@@ -25,6 +25,7 @@ export default async () => {
 
   const client = new S3Client({
     forcePathStyle: true,
+    region: 'us-east-1',
     credentials: {
       accessKeyId: 'S3RVER',
       secretAccessKey: 'S3RVER',
