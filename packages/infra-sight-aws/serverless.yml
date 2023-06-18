@@ -46,6 +46,7 @@ provider:
     AWS_BUCKET: ${env:AWS_BUCKET, self:custom.bucket}
     INFRA_SIGHT_API_URL: ${env:INFRA_SIGHT_API_URL, self:custom.url}
     S3_CONFIG: ${env:S3_CONFIG, null}
+    SERVERLESS_STAGE: ${opt:stage, self:provider.stage}
   layers:
     - arn:aws:lambda:${aws:region}:464622532012:layer:Datadog-Extension-ARM:44
   architecture: arm64
