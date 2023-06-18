@@ -50,7 +50,7 @@ provider:
   environment:
     NODE_OPTIONS: --enable-source-maps
     AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-handler
-    OPENTELEMETRY_COLLECTOR_CONFIG_FILE: /var/task/collector.yaml
+    OPENTELEMETRY_COLLECTOR_CONFIG_FILE: /var/task/collector.yml
     AWS_BUCKET: ${env:AWS_BUCKET, self:custom.bucket}
     INFRA_SIGHT_API_URL: ${env:INFRA_SIGHT_API_URL, self:custom.url}
     S3_CONFIG: ${env:S3_CONFIG, null}
