@@ -50,12 +50,14 @@ jobs:
 
       - name: Test Deployment
         id: test-deployment
-        run: npm --workspace @infra-sight/aws run test -- --mode test:live
+        run: npm --workspace @infra-sight/aws run test -- --mode test:$SERVERLESS_STAGE
+
         continue-on-error: true
 
       - name: Rollback
         if: steps.test-deployment.outcome == 'failure'
         run: npx serverless rollback --stage $SERVERLESS_STAGE --timestamp $SERVERLESS_DEPLOYMENT_VERSION
+        working-directory: ./packages/infra-sight-aws
 
       - name: Deploy API Metadata
         if: steps.test-deployment.outcome == 'success'

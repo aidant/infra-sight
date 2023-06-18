@@ -15,12 +15,6 @@ custom:
     sourcemap: true
     platform: neutral
     outputFileExtension: '.mjs'
-    external:
-      - '@aws-sdk/client-s3'
-      - cheerio
-      - node:crypto
-      - fast-json-stable-stringify
-      - joi
     exclude:
       - '@aws-sdk/client-s3'
       - node:crypto
