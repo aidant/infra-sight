@@ -1,9 +1,12 @@
 import { fork } from 'node:child_process'
+import { createRequire } from 'node:module'
 import { createInterface as createReadline } from 'node:readline/promises'
+
+const require = createRequire(import.meta.url)
 
 export default async () => {
   const child = fork(
-    './node_modules/serverless/bin/serverless.js',
+    require.resolve('serverless/bin/serverless.js'),
     ['offline', '--stage', 'test'],
     {
       stdio: 'pipe',
