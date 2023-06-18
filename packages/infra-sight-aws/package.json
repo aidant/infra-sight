@@ -25,7 +25,7 @@
   "sideEffects": [
     "./src/instrument.ts"
   ],
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.353.0",
     "@infra-sight/api": "*",

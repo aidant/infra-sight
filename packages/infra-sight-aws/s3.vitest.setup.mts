@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { exec, fork } from 'node:child_process'
 
 export default async () => {
-  const child = fork('./s3.js', {
+  const child = fork('./s3.mjs', {
     env: Object.assign(Object.create(null), process.env, {
       NODE_OPTIONS: process.env['NODE_OPTIONS']
         ? process.env['NODE_OPTIONS'] + ' --openssl-legacy-provider'

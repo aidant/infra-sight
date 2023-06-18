@@ -2,13 +2,13 @@ import { defineProject } from 'vitest/config'
 
 export default defineProject((config) => {
   const stage =
-    /test:(?<stage>production|staging|development)/.exec(config.mode)?.groups?.stage || 'local'
+    /test:(?<stage>production|staging|development)/.exec(config.mode)?.groups?.['stage'] || 'local'
 
   const env: Record<string, string> = {}
   const globalSetup: string[] = []
 
   if (stage === 'local') {
-    globalSetup.push('./s3.vitest.setup.ts', './serverless-offline.vitest.setup.ts')
+    globalSetup.push('./s3.vitest.setup.mts', './serverless-offline.vitest.setup.mts')
 
     env['AWS_BUCKET'] = 'infra-sight-test-bucket'
     env['INFRA_SIGHT_API_URL'] = 'http://localhost:3000/'

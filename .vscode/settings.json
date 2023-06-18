@@ -20,6 +20,6 @@
   "explorer.fileNesting.patterns": {
     "*.ts": "${capture}.test.ts",
     "package.json": "package-lock.json, .gitignore, .prettierrc, .npmignore, tsconfig.json, tsconfig.tsbuildinfo, vitest.workspace.ts",
-    "vitest.config.ts": "*.vitest.setup.ts, .env.test, s3.js"
+    "vitest.config.ts": "*.vitest.setup.mts, .env.test, s3.mjs"
   }
 }

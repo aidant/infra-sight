@@ -12,15 +12,8 @@ custom:
   esbuild:
     target: node18
     sourcemap: true
-    platform: neutral
-    outputFileExtension: '.mjs'
     exclude:
       - '@aws-sdk/client-s3'
-      - '@opentelemetry/*'
-      - node:crypto
-    mainFields:
-      - module
-      - main
 
   name: ${self:service}-${opt:stage, self:provider.stage}
   domain: ${self:custom.stage.${opt:stage, self:provider.stage}.domain}
