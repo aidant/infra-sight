@@ -5,14 +5,10 @@ useDotenv: true
 service: infra-sight
 
 plugins:
-  - serverless-plugin-datadog
   - serverless-esbuild
   - serverless-offline
 
 custom:
-  datadog:
-    apiKey: ${env:DD_API_KEY, null}
-
   esbuild:
     target: node18
     sourcemap: true
@@ -20,6 +16,7 @@ custom:
     outputFileExtension: '.mjs'
     exclude:
       - '@aws-sdk/client-s3'
+      - '@opentelemetry/*'
       - node:crypto
     mainFields:
       - module
@@ -51,10 +48,13 @@ provider:
   timeout: 28
   environment:
     NODE_OPTIONS: --enable-source-maps
-    OPENTELEMETRY_COLLECTOR_CONFIG_FILE: /var/task/collector.yml
+    DD_API_KEY: ${env:DD_API_KEY, null}
+    DD_OTLP_CONFIG_RECEIVER_PROTOCOLS_HTTP_ENDPOINT: localhost:4318
     AWS_BUCKET: ${env:AWS_BUCKET, self:custom.bucket}
     INFRA_SIGHT_API_URL: ${env:INFRA_SIGHT_API_URL, self:custom.url}
     S3_CONFIG: ${env:S3_CONFIG, null}
+  layers:
+    - arn:aws:lambda:${aws:region}:464622532012:layer:Datadog-Extension-ARM:44
   architecture: arm64
   iam:
     role:

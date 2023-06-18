@@ -1,3 +1,5 @@
+import '../instrument.js'
+
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2, Context } from 'aws-lambda'
 import { AWS_BUCKET, s3 } from '../s3.js'

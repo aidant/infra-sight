@@ -1,3 +1,5 @@
+import '../instrument.js'
+
 import * as api from '@infra-sight/api'
 import type { InfraSightResolutionStrategies } from '@infra-sight/sdk'
 import * as sdk from '@infra-sight/sdk'

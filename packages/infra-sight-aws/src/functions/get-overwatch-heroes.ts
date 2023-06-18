@@ -1,3 +1,5 @@
+import '../instrument.js'
+
 import * as api from '@infra-sight/api'
 import * as sdk from '@infra-sight/sdk'
 import { createScraperHandler } from '../create-handler.js'

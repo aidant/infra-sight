@@ -1,3 +1,5 @@
+import '../instrument.js'
+
 import { createListHandler } from '../create-handler.js'
 import { trace } from '../telemetry.js'
 
