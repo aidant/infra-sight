@@ -20,6 +20,7 @@ const parseTopHeroesByProfileAndGamemode = trace(
   {
     name: 'InfraSight.parser.parseTopHeroesByProfileAndGamemode',
     with: ($, prefix, { profileId, profile, gamemodeId, gamemode }) => ({
+      'infra_sight.options.prefix': prefix,
       'infra_sight.options.profileId': profileId,
       'infra_sight.options.profile': profile,
       'infra_sight.options.gamemodeId': gamemodeId,
@@ -73,6 +74,7 @@ const parseTopHeroesByProfile = trace(
   {
     name: 'InfraSight.parser.parseTopHeroesByProfile',
     with: ($, prefix, { profileId, profile }) => ({
+      'infra_sight.options.prefix': prefix,
       'infra_sight.options.profileId': profileId,
       'infra_sight.options.profile': profile,
     }),

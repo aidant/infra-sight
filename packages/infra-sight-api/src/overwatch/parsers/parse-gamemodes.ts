@@ -1,3 +1,4 @@
+import { flatten } from '@infra-sight/telemetry'
 import type { CheerioAPI } from 'cheerio'
 import { trace } from '../../telemetry.js'
 import { sanitize } from '../sanitize.js'
@@ -5,6 +6,12 @@ import { sanitize } from '../sanitize.js'
 export const parseGamemodes = trace(
   {
     name: 'InfraSight.parser.parseGamemodes',
+    with: function ($, prefix) {
+      return {
+        'infra_sight.options.prefix': prefix,
+        ...flatten('infra_sight.result.gamemodes', this.result),
+      }
+    },
   },
   ($: CheerioAPI, prefix: string): Record<string, string> => {
     const gamemodes: Record<string, string> = {}

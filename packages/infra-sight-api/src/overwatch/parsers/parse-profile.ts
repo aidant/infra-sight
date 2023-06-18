@@ -1,4 +1,5 @@
 import type { InfraSightAccount, InfraSightProfile, OverwatchHeroRecord } from '@infra-sight/sdk'
+import { flatten } from '@infra-sight/telemetry'
 import type { CheerioAPI } from 'cheerio'
 import { trace } from '../../telemetry.js'
 import { InfraSightProfileSchema } from '../schemas/infra-sight-profile.js'
@@ -12,9 +13,7 @@ export const parseProfile = trace(
   {
     name: 'InfraSight.parser.parseProfile',
     with: ($, account) => ({
-      'infra_sight.options.account.name': account.name,
-      'infra_sight.options.account.is_public': account.is_public,
-      'infra_sight.options.account.overwatch_url': account.overwatch_url,
+      ...flatten('infra_sight.options.account', account),
     }),
   },
   ($: CheerioAPI, account: InfraSightAccount, heroes: OverwatchHeroRecord): InfraSightProfile => {

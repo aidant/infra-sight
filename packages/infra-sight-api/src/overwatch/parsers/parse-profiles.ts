@@ -1,9 +1,13 @@
+import { flatten } from '@infra-sight/telemetry'
 import type { CheerioAPI } from 'cheerio'
 import { trace } from '../../telemetry.js'
 
 export const parseProfiles = trace(
   {
     name: 'InfraSight.parser.parseProfiles',
+    with: function () {
+      return flatten('infra_sight.result.profiles', this.result)
+    },
   },
   ($: CheerioAPI) => {
     const profiles: Record<string, string> = {}

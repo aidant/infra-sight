@@ -1,10 +1,4 @@
-import {
-  SpanKind,
-  SpanStatusCode,
-  trace as opentelemetry,
-  type Attributes,
-  type Span,
-} from '@opentelemetry/api'
+import { SpanKind, SpanStatusCode, trace, type Attributes, type Span } from '@opentelemetry/api'
 import { SemanticAttributes } from '@opentelemetry/semantic-conventions'
 
 export interface TraceOptions<Method extends (this: any, ...paramaters: any[]) => any> {
@@ -16,11 +10,11 @@ export interface TraceOptions<Method extends (this: any, ...paramaters: any[]) =
 }
 
 export const createTraceFunction = (name: `@infra-sight/${string}`) => {
-  const tracer = opentelemetry.getTracer(name, '2')
+  const tracer = trace.getTracer(name, '2')
 
   return <Method extends (this: any, ...paramaters: any[]) => any>(
     options: TraceOptions<Method>,
-    fn: Method
+    method: Method
   ): Method => {
     return Object.defineProperties(function (
       this: ThisParameterType<Method>,
@@ -31,14 +25,14 @@ export const createTraceFunction = (name: `@infra-sight/${string}`) => {
         {
           kind: SpanKind.SERVER,
           attributes: {
-            [SemanticAttributes.CODE_FUNCTION]: fn.name,
+            [SemanticAttributes.CODE_FUNCTION]: method.name,
           },
         },
         (span: Span): ReturnType<Method> => {
           let result: ReturnType<Method>
 
           try {
-            result = fn.apply(this, paramaters)
+            result = method.apply(this, paramaters)
           } catch (error) {
             span.recordException(error instanceof Error ? error : String(error))
             span.setStatus({
@@ -81,10 +75,32 @@ export const createTraceFunction = (name: `@infra-sight/${string}`) => {
         }
       )
     },
-    Object.getOwnPropertyDescriptors(fn)) as Method
+    Object.getOwnPropertyDescriptors(method)) as Method
   }
 }
 
 export const reportError = (error: unknown) => {
-  opentelemetry.getActiveSpan()?.recordException(error instanceof Error ? error : String(error))
+  trace.getActiveSpan()?.recordException(error instanceof Error ? error : String(error))
+}
+
+export const log = (message: string, attributes: Attributes) => {
+  trace.getActiveSpan()?.addEvent(message, attributes)
+}
+
+export const flatten = (prefix: string, object: unknown): Attributes => {
+  const attributes: Attributes = {}
+
+  if (object && typeof object === 'object') {
+    for (const [key, value] of Object.entries(object)) {
+      Object.assign(attributes, flatten(`${prefix}.${key}`, value))
+    }
+  } else if (
+    typeof object === 'string' ||
+    typeof object === 'number' ||
+    typeof object === 'boolean'
+  ) {
+    attributes[prefix] = object
+  }
+
+  return attributes
 }

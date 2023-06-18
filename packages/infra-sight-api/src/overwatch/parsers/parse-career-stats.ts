@@ -70,6 +70,7 @@ const parseCareerStatsByProfileAndGamemode = trace(
   {
     name: 'InfraSight.parser.parseCareerStatsByProfileAndGamemode',
     with: ($, prefix, { profileId, profile, gamemodeId, gamemode }, stats) => ({
+      'infra_sight.options.prefix': prefix,
       'infra_sight.options.profileId': profileId,
       'infra_sight.options.profile': profile,
       'infra_sight.options.gamemodeId': gamemodeId,
@@ -121,6 +122,7 @@ const parseCareerStatsByProfile = trace(
   {
     name: 'InfraSight.parser.parseCareerStatsByProfile',
     with: ($, prefix, { profileId, profile }, stats) => ({
+      'infra_sight.options.prefix': prefix,
       'infra_sight.options.profileId': profileId,
       'infra_sight.options.profile': profile,
     }),
