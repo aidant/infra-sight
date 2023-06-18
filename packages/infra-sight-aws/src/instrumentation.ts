@@ -1,13 +1,21 @@
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { registerInstrumentations } from '@opentelemetry/instrumentation'
+import { AwsLambdaInstrumentation } from '@opentelemetry/instrumentation-aws-lambda'
+import { AwsInstrumentation } from '@opentelemetry/instrumentation-aws-sdk'
 import { Resource } from '@opentelemetry/resources'
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 
 registerInstrumentations({
-  instrumentations: [getNodeAutoInstrumentations()],
+  instrumentations: [
+    new AwsInstrumentation({
+      suppressInternalInstrumentation: true,
+    }),
+    new AwsLambdaInstrumentation({
+      disableAwsContextPropagation: true,
+    }),
+  ],
 })
 
 const resource = Resource.default().merge(

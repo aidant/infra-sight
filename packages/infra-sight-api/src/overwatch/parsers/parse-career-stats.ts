@@ -1,5 +1,6 @@
 import type { InfraSightCareerStatsRecord } from '@infra-sight/sdk'
 import type { CheerioAPI } from 'cheerio'
+import { trace } from '../../telemetry.js'
 import { sanitize } from '../sanitize.js'
 import { InfraSightCareerStatsRecordSchema } from '../schemas/infra-sight-career-stats-record.js'
 import { validate } from '../validate.js'
@@ -65,74 +66,104 @@ interface ParseCareerStatsByProfileAndGamemodeOptions {
   gamemode: string
 }
 
-const parseCareerStatsByProfileAndGamemode = (
-  $: CheerioAPI,
-  prefix: string,
-  { profileId, profile, gamemodeId, gamemode }: ParseCareerStatsByProfileAndGamemodeOptions,
-  stats: InfraSightCareerStatsRecord
-) => {
-  const heroes = parseDropdown(
-    $,
-    `${prefix} .Profile-dropdown[data-dropdown-id="hero-dropdown"] option`
-  )
+const parseCareerStatsByProfileAndGamemode = trace(
+  {
+    name: 'InfraSight.parser.parseCareerStatsByProfileAndGamemode',
+    with: ($, prefix, { profileId, profile, gamemodeId, gamemode }, stats) => ({
+      'infra_sight.options.profileId': profileId,
+      'infra_sight.options.profile': profile,
+      'infra_sight.options.gamemodeId': gamemodeId,
+      'infra_sight.options.gamemode': gamemode,
+    }),
+  },
+  (
+    $: CheerioAPI,
+    prefix: string,
+    { profileId, profile, gamemodeId, gamemode }: ParseCareerStatsByProfileAndGamemodeOptions,
+    stats: InfraSightCareerStatsRecord
+  ) => {
+    const heroes = parseDropdown(
+      $,
+      `${prefix} .Profile-dropdown[data-dropdown-id="hero-dropdown"] option`
+    )
 
-  $(`${prefix} .stats-container .stat-item`).each((i, e) => {
-    const element = $(e)
+    $(`${prefix} .stats-container .stat-item`).each((i, e) => {
+      const element = $(e)
 
-    const category = element.siblings('.header').text()
-    const heroId = element
-      .parents('.stats-container')
-      .attr()
-      ?.['class']?.split(' ')
-      .find((c) => c.startsWith('option-'))
-      ?.replace(/^option-/, '')!
-    const heroRaw = heroes[heroId]!
-    const stat = element.children().first().text()
-    const valueRaw = element.children().next().text()
+      const category = element.siblings('.header').text()
+      const heroId = element
+        .parents('.stats-container')
+        .attr()
+        ?.['class']?.split(' ')
+        .find((c) => c.startsWith('option-'))
+        ?.replace(/^option-/, '')!
+      const heroRaw = heroes[heroId]!
+      const stat = element.children().first().text()
+      const valueRaw = element.children().next().text()
 
-    const hero = /all heroes/i.test(heroRaw) ? null : heroRaw
-    const id = (hero ? [profileId, gamemodeId, hero, stat] : [profileId, gamemodeId, stat])
-      .map(sanitizeWithPlurals)
-      .join('__')
-    const value = parseNumber(valueRaw)
+      const hero = /all heroes/i.test(heroRaw) ? null : heroRaw
+      const id = (hero ? [profileId, gamemodeId, hero, stat] : [profileId, gamemodeId, stat])
+        .map(sanitizeWithPlurals)
+        .join('__')
+      const value = parseNumber(valueRaw)
 
-    stats[id] = { id, profile, gamemode, category, hero, stat, value }
-  })
-}
+      stats[id] = { id, profile, gamemode, category, hero, stat, value }
+    })
+  }
+)
 
 interface ParseCareerStatsByProfileOptions {
   profileId: string
   profile: string
 }
 
-const parseCareerStatsByProfile = (
-  $: CheerioAPI,
-  prefix: string,
-  { profileId, profile }: ParseCareerStatsByProfileOptions,
-  stats: InfraSightCareerStatsRecord
-) => {
-  const gamemodes = parseGamemodes($, prefix)
+const parseCareerStatsByProfile = trace(
+  {
+    name: 'InfraSight.parser.parseCareerStatsByProfile',
+    with: ($, prefix, { profileId, profile }, stats) => ({
+      'infra_sight.options.profileId': profileId,
+      'infra_sight.options.profile': profile,
+    }),
+  },
+  (
+    $: CheerioAPI,
+    prefix: string,
+    { profileId, profile }: ParseCareerStatsByProfileOptions,
+    stats: InfraSightCareerStatsRecord
+  ) => {
+    const gamemodes = parseGamemodes($, prefix)
 
-  for (const [gamemodeKey, gamemode] of Object.entries(gamemodes)) {
-    const gamemodeId = sanitize(gamemode)
-    parseCareerStatsByProfileAndGamemode(
-      $,
-      `${prefix} .stats.${gamemodeKey}-view`,
-      { profileId, profile, gamemodeId, gamemode },
-      stats
-    )
+    for (const [gamemodeKey, gamemode] of Object.entries(gamemodes)) {
+      const gamemodeId = sanitize(gamemode)
+      parseCareerStatsByProfileAndGamemode(
+        $,
+        `${prefix} .stats.${gamemodeKey}-view`,
+        { profileId, profile, gamemodeId, gamemode },
+        stats
+      )
+    }
   }
-}
+)
 
-export const parseCareerStats = ($: CheerioAPI): InfraSightCareerStatsRecord => {
-  const stats: InfraSightCareerStatsRecord = {}
+export const parseCareerStats = trace(
+  {
+    name: 'InfraSight.parser.parseCareerStats',
+  },
+  ($: CheerioAPI): InfraSightCareerStatsRecord => {
+    const stats: InfraSightCareerStatsRecord = {}
 
-  const profiles = parseProfiles($)
+    const profiles = parseProfiles($)
 
-  for (const [profileKey, profile] of Object.entries(profiles)) {
-    const profileId = sanitize(profile)
-    parseCareerStatsByProfile($, `.Profile-view.${profileKey}-view`, { profileId, profile }, stats)
+    for (const [profileKey, profile] of Object.entries(profiles)) {
+      const profileId = sanitize(profile)
+      parseCareerStatsByProfile(
+        $,
+        `.Profile-view.${profileKey}-view`,
+        { profileId, profile },
+        stats
+      )
+    }
+
+    return validate<InfraSightCareerStatsRecord>(InfraSightCareerStatsRecordSchema, stats)
   }
-
-  return validate<InfraSightCareerStatsRecord>(InfraSightCareerStatsRecordSchema, stats)
-}
+)

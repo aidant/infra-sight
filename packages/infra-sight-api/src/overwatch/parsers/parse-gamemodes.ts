@@ -1,37 +1,43 @@
 import type { CheerioAPI } from 'cheerio'
+import { trace } from '../../telemetry.js'
 import { sanitize } from '../sanitize.js'
 
-export const parseGamemodes = ($: CheerioAPI, prefix: string): Record<string, string> => {
-  const gamemodes: Record<string, string> = {}
+export const parseGamemodes = trace(
+  {
+    name: 'InfraSight.parser.parseGamemodes',
+  },
+  ($: CheerioAPI, prefix: string): Record<string, string> => {
+    const gamemodes: Record<string, string> = {}
 
-  const names: string[] = []
+    const names: string[] = []
 
-  $(`${prefix} .Profile-heroSummary--filters blz-button`).each((i, e) => {
-    const name = $(e).text()
-    names.push(name)
-  })
+    $(`${prefix} .Profile-heroSummary--filters blz-button`).each((i, e) => {
+      const name = $(e).text()
+      names.push(name)
+    })
 
-  $(`${prefix} .Profile-heroSummary--view`).each((i, e) => {
-    const classes = $(e)
-      .attr()
-      ?.['class']?.split(' ')
-      .filter((c) => c !== 'Profile-heroSummary--view')
-      .filter((c) => c.endsWith('-view'))
+    $(`${prefix} .Profile-heroSummary--view`).each((i, e) => {
+      const classes = $(e)
+        .attr()
+        ?.['class']?.split(' ')
+        .filter((c) => c !== 'Profile-heroSummary--view')
+        .filter((c) => c.endsWith('-view'))
 
-    if (classes) {
-      for (const name of names) {
-        const gamemode = sanitize(name)
+      if (classes) {
+        for (const name of names) {
+          const gamemode = sanitize(name)
 
-        const id = classes
-          .find((c) => c.startsWith(gamemode.replace(/_play$/, '')))
-          ?.replace(/-view$/, '')
+          const id = classes
+            .find((c) => c.startsWith(gamemode.replace(/_play$/, '')))
+            ?.replace(/-view$/, '')
 
-        if (id) {
-          gamemodes[id] = name
+          if (id) {
+            gamemodes[id] = name
+          }
         }
       }
-    }
-  })
+    })
 
-  return gamemodes
-}
+    return gamemodes
+  }
+)

@@ -8,7 +8,7 @@ import {
 import { SemanticAttributes } from '@opentelemetry/semantic-conventions'
 
 export interface TraceOptions<Method extends (this: any, ...paramaters: any[]) => any> {
-  name: `InfraSight.${'function' | 'utility'}.${string}`
+  name: `InfraSight.${'function' | 'utility' | 'parser'}.${string}`
   with?: (
     this: { result?: Readonly<Awaited<ReturnType<Method>>> },
     ...paramaters: Readonly<Parameters<Method>>
