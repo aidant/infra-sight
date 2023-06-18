@@ -2,7 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "ignoreDeprecations": "5.0",
+    "importsNotUsedAsValues": "error",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "preserveValueImports": false,
+    "verbatimModuleSyntax": false,
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["./src/**/*.test.ts"],
