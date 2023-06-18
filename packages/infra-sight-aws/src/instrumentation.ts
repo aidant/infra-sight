@@ -1,7 +1,6 @@
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node'
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 import { registerInstrumentations } from '@opentelemetry/instrumentation'
-import { AwsLambdaInstrumentation } from '@opentelemetry/instrumentation-aws-lambda'
-import { AwsInstrumentation } from '@opentelemetry/instrumentation-aws-sdk'
 import { Resource } from '@opentelemetry/resources'
 import {
   BatchSpanProcessor,
@@ -10,15 +9,9 @@ import {
 } from '@opentelemetry/sdk-trace-base'
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
+
 registerInstrumentations({
-  instrumentations: [
-    new AwsInstrumentation({
-      suppressInternalInstrumentation: true,
-    }),
-    new AwsLambdaInstrumentation({
-      disableAwsContextPropagation: true,
-    }),
-  ],
+  instrumentations: [getNodeAutoInstrumentations()],
 })
 
 const resource = Resource.default().merge(
@@ -34,6 +27,10 @@ const provider = new NodeTracerProvider({
 
 provider.addSpanProcessor(new BatchSpanProcessor(new ConsoleSpanExporter()))
 provider.addSpanProcessor(
-  new SimpleSpanProcessor(new OTLPTraceExporter({ url: 'http://localhost:4318/v1/traces' }))
+  new SimpleSpanProcessor(
+    new OTLPTraceExporter({
+      url: 'http://localhost:4318/v1/traces',
+    })
+  )
 )
 provider.register()

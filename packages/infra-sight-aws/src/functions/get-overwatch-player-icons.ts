@@ -1,11 +1,11 @@
-import '../instrument.js'
+import '../instrumentation.js'
 
 import * as api from '@infra-sight/api'
 import * as sdk from '@infra-sight/sdk'
 import { createScraperHandler } from '../create-handler.js'
-import { trace } from '../telemetry.js'
+import { traceEndpoint } from '../telemetry.js'
 
-export const getOverwatchPlayerIcons = trace(
+export const getOverwatchPlayerIcons = traceEndpoint(
   {
     name: 'InfraSight.function.getOverwatchPlayerIcons',
   },

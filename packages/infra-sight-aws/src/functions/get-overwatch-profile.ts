@@ -1,12 +1,12 @@
-import '../instrument.js'
+import '../instrumentation.js'
 
 import * as api from '@infra-sight/api'
 import type { InfraSightResolutionStrategies } from '@infra-sight/sdk'
 import * as sdk from '@infra-sight/sdk'
 import { createScraperHandler } from '../create-handler.js'
-import { trace } from '../telemetry.js'
+import { traceEndpoint } from '../telemetry.js'
 
-export const getOverwatchProfile = trace(
+export const getOverwatchProfile = traceEndpoint(
   {
     name: 'InfraSight.function.getOverwatchProfile',
     with: (event) => ({

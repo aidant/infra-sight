@@ -1,9 +1,9 @@
-import '../instrument.js'
+import '../instrumentation.js'
 
 import { createListHandler } from '../create-handler.js'
-import { trace } from '../telemetry.js'
+import { traceEndpoint } from '../telemetry.js'
 
-export const listOverwatchHeroesHistory = trace(
+export const listOverwatchHeroesHistory = traceEndpoint(
   {
     name: 'InfraSight.function.listOverwatchHeroesHistory',
     with: (event) => ({

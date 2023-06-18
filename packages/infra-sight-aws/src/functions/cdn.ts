@@ -1,11 +1,11 @@
-import '../instrument.js'
+import '../instrumentation.js'
 
 import { GetObjectCommand } from '@aws-sdk/client-s3'
 import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2, Context } from 'aws-lambda'
 import { AWS_BUCKET, s3 } from '../s3.js'
-import { trace } from '../telemetry.js'
+import { traceEndpoint } from '../telemetry.js'
 
-export const cdn = trace(
+export const cdn = traceEndpoint(
   {
     name: 'InfraSight.function.cdn',
     with: (event) => ({

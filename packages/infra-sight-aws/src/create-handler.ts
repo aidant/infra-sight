@@ -5,12 +5,7 @@ import {
   type InfraSightPaginationResponse,
 } from '@infra-sight/sdk'
 import { reportError } from '@infra-sight/telemetry'
-import type {
-  APIGatewayProxyEventV2,
-  APIGatewayProxyHandlerV2,
-  APIGatewayProxyStructuredResultV2,
-  Context,
-} from 'aws-lambda'
+import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2, Context } from 'aws-lambda'
 import stringify from 'fast-json-stable-stringify'
 import crypto from 'node:crypto'
 import { AWS_BUCKET, s3 } from './s3.js'
@@ -55,6 +50,11 @@ interface ScrapeResponse {
   payload: object
   cache?: number | undefined
 }
+
+type APIGatewayProxyHandlerV2 = (
+  event: APIGatewayProxyEventV2,
+  context: Context
+) => Promise<APIGatewayProxyStructuredResultV2>
 
 export const createScraperHandler =
   (
