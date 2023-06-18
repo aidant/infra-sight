@@ -48,6 +48,8 @@ jobs:
       - name: Serverless Deploy
         run: npx serverless deploy --stage $SERVERLESS_STAGE
         working-directory: ./packages/infra-sight-aws
+        env:
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
 
       - name: Test Deployment
         id: test-deployment
